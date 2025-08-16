@@ -128,10 +128,19 @@ This example demonstrates how to control the robot's movement using keyboard com
     (csuite) activation false
     (csuite) quit
     ```
-
+    
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+In addition, the following components are based on forked repositories with modifications:
+
+- Controller module is forked and adapted from [fan-ziqi/rl_sar](https://github.com/fan-ziqi/rl_sar)  
+- Gazebo simulation for the Livox Mid-360 is forked and adapted from [LCAS/livox_laser_simulation_ros2](https://github.com/LCAS/livox_laser_simulation_ros2)
+
+Each of these components follows the respective license of the original repository.
+
+
 
 ## Contact
 
