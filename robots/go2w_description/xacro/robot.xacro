@@ -4,5 +4,10 @@
 
     <xacro:include filename="$(find go2w_description)/urdf/go2w_description.urdf"/>
     <xacro:include filename="$(find go2w_description)/xacro/gazebo.xacro"/>
+    <xacro:include filename="$(find ros2_livox_simulation)/urdf/mid360.xacro"/>
+
+    <xacro:mid360 name="livox_frame" parent="imu_link" topic="livox/lidar">
+        <origin xyz="0.1870 0 0.0803" rpy="0 0.22689 0"/>
+    </xacro:mid360>
 
 </robot>
