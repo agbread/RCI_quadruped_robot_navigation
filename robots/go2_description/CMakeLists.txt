@@ -19,7 +19,7 @@ elseif($ENV{ROS_DISTRO} MATCHES "foxy|humble")
     find_package(urdf REQUIRED)
     find_package(xacro REQUIRED)
     find_package(robot_state_publisher REQUIRED)
-    foreach(dir config launch meshes urdf xacro)
+    foreach(dir config launch meshes urdf xacro rviz)
         if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${dir})
             install(
                 DIRECTORY ${dir}/
