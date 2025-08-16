@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Ziqi Fan
+ * Copyright (c) 2024-2025 Ziqi Fan (Modified by Sanghyun Kim)
  * SPDX-License-Identifier: Apache-2.0
  */
 

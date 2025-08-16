@@ -1,11 +1,12 @@
-# Copyright (c) 2024-2025 Ziqi Fan
+# Copyright (c) 2024-2025 Ziqi Fan (Modified by Sanghyun Kim)
 # SPDX-License-Identifier: Apache-2.0
 
 import os
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, TextSubstitution, Command
+from launch.substitutions import LaunchConfiguration, TextSubstitution, Command, PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from ament_index_python.packages import get_package_share_directory
@@ -93,6 +94,19 @@ def generate_launch_description():
         }],
     )
 
+    display_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare(
+                    [rname, '_description']
+                ),
+                'launch',
+                'display.launch.py'
+            ])
+        ),
+        launch_arguments={'use_sim_time': 'true'}.items()
+    )
+
     return LaunchDescription([
         DeclareLaunchArgument(
             "rname",
@@ -106,4 +120,5 @@ def generate_launch_description():
         # robot_joint_controller_node,  # Spawn in rl_sim.cpp
         joy_node,
         param_node,
+        display_launch,
     ])
