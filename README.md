@@ -162,4 +162,5 @@ Each of these components follows the respective license of the original reposito
 ## Contact
 
 **Maintainer:** Sanghyun Kim (`kim87@khu.ac.kr`)
+
 **Lab:** [RCI Lab @ Kyung Hee University](https://rcilab.khu.ac.kr)
