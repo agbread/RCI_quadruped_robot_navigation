@@ -6,12 +6,8 @@
     <xacro:include filename="$(find go2_description)/xacro/gazebo.xacro"/>
     <xacro:include filename="$(find ros2_livox_simulation)/urdf/mid360.xacro"/>
 
-    <joint name="mid360_joint" type="fixed">
-        <parent link="imu_link"/>
-        <child link="livox_frame"/>
+    <xacro:mid360 name="livox_frame" parent="imu_link" topic="livox/lidar">
         <origin xyz="0.1870 0 0.0803" rpy="0 0.22689 0"/>
-    </joint>
-
-    <xacro:livox_mid360_sensor ns="livox" topic="livox/lidar" />
+    </xacro:mid360>
 
 </robot>
