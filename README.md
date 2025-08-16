@@ -4,6 +4,8 @@ This repository integrates reinforcement learning (RL), navigation, and simulati
 
 ## Overview
 
+![Overview](image/overview.gif)
+
 This project follows a Sim-to-Sim approach, executing controllers trained in Isaac Lab within the Gazebo simulator. The virtual Unitree Go2 and Go2W robots are equipped with a Livox Mid-360 LiDAR. The mounting position of the LiDAR is based on the [Unitree developer documentation](https://support.unitree.com/home/en/developer/SLAM%20and%20Navigation_service).
 
 ## Prerequisites
@@ -120,7 +122,7 @@ This example demonstrates how to control the robot's movement using keyboard com
     ```bash
     ros2 run teleop_twist_keyboard teleop_twist_keyboard
     ```
-    You can now move the robot using the capital keys displayed in the terminal (e.g., `U`, `I`, `O`, `J`, `K`, `L`, `M`, `<`, `>`).
+    You can now move the robot using the capital keys displayed in the terminal (e.g., `U`, `I`, `O`, `J`, `K`, `L`, `M`, `<`, `>`)
 
 3.  **Deactivate the Robot:**
     When you are finished, deactivate the robot and exit the command interface by returning to the `rl_action` terminal and entering:
@@ -129,6 +131,21 @@ This example demonstrates how to control the robot's movement using keyboard com
     (csuite) quit
     ```
     
+## TodoList 
+
+1. **Navigation integration**  
+   - Add navigation capability using either the `Nav2` package or by integrating with [unitree_go2_nav](https://github.com/Sayantani-Bhattacharya/unitree_go2_nav)
+
+2. **OpenRMF support**  
+   - Incorporate [Open-RMF](https://www.open-rmf.org/) functionality for fleet and task management
+
+3. **Minor bug fixes**  
+   - Verify and correct PCD positioning  
+   - ![LiDAR bug](image/lidar_bug.png)
+
+4. **RL model update**  
+   - Modify reinforcement learning to account for LiDAR weight
+
 ## License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
