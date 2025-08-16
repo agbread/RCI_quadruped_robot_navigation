@@ -1,3 +1,6 @@
+> [!NOTE]
+> This is a fork of https://github.com/fan-ziqi/rl_sar, modified for go2 and go2w optimization.
+
 # rl_sar
 
 [![Ubuntu 20.04/22.04](https://img.shields.io/badge/Ubuntu-20.04/22.04-blue.svg?logo=ubuntu)](https://ubuntu.com/)
