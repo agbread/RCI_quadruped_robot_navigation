@@ -35,7 +35,9 @@ Before you begin, ensure you have the following dependencies installed:
       ros-humble-gazebo-ros2-control \
       ros-humble-gazebo-ros-pkgs \
       ros-humble-xacro \
-      ros-humble-navigation2
+      ros-humble-navigation2 \
+      ros-humble-octomap-ros\
+      ros-humble-octomap-rviz-plugins\
     ```
 
 4.  **LibTorch (C++):**
