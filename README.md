@@ -144,6 +144,7 @@ This example demonstrates how to control the robot's movement using keyboard com
 3. **Minor bug fixes**  
    - Verify and correct PCD positioning  
    - ![LiDAR bug](image/lidar_bug.png)
+   - Hot Fix!, There is some
 
 4. **RL model update**  
    - Modify reinforcement learning to account for LiDAR weight
