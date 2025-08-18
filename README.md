@@ -47,7 +47,7 @@ Before you begin, ensure you have the following dependencies installed:
     wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.0.1%2Bcpu.zip
     unzip libtorch-cxx11-abi-shared-with-deps-2.0.1+cpu.zip
     rm libtorch-cxx11-abi-shared-with-deps-2.0.1+cpu.zip
-    echo 'export Torch_DIR=$(pwd)/libtorch' >> ~/.bashrc
+    echo 'export Torch_DIR=$HOME/libs/libtorch' >> ~/.bashrc
     source ~/.bashrc
     ```
 
