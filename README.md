@@ -143,8 +143,10 @@ This example demonstrates how to control the robot's movement using keyboard com
 
 3. **Minor bug fixes**  
    - Verify and correct PCD positioning  
-   - ![LiDAR bug](image/lidar_bug.png)
-   - Hot Fix!, There is some
+   - ![LiDAR bug](image/lidar_bug.png)  
+   - **Hot Fix!** To minimize distortion of the Livox Mid-360, set `min_range = 0`.  
+     See the discussion here: [Livox-SDK/livox_laser_simulation#19](https://github.com/Livox-SDK/livox_laser_simulation/issues/19)
+
 
 4. **RL model update**  
    - Modify reinforcement learning to account for LiDAR weight
