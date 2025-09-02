@@ -316,7 +316,7 @@
 
     </xacro:if>
 
-    <gazebo reference="base">
+    <gazebo reference="base_link">
         <material>Gazebo/Green</material>
         <turnGravityOff>false</turnGravityOff>
     </gazebo>

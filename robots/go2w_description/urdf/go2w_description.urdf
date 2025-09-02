@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <robot name="go2w_description">
-  <link name="base">
+  <link name="base_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -10,7 +10,7 @@
   </link>
   <joint name="floating_base" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0"/>
-    <parent link="base"/>
+    <parent link="base_link"/>
     <child link="trunk"/>
   </joint>
 
@@ -741,7 +741,7 @@
   </link>
   <joint name="livox_imu_joint" type="fixed">
     <origin xyz="0.16143 0 0.12262" rpy="0 0.22689 0"/>
-    <parent link="base" />
+    <parent link="base_link" />
     <child link="livox_imu_link" />
     <axis xyz="0 0 0" />
   </joint>

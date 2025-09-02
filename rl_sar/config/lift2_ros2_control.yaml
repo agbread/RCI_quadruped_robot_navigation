@@ -1,0 +1,19 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    cabin_traj_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      joints: [cabin_joint]
+      command_interfaces: [position]
+      state_interfaces: [position, velocity]
+      state_publish_rate: 50
+      constraints:
+        goal_time: 2.0
+        stopped_velocity_tolerance: 0.02
+        cabin_joint: {goal: 0.01}
+      gains:
+        cabin_joint: {p: 300.0, d: 10.0, i: 0.0}
