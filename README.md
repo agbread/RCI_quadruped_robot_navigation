@@ -6,7 +6,7 @@ This repository integrates reinforcement learning (RL), navigation, and simulati
 
 ![Overview](image/overview.gif)
 
-This project follows a Sim-to-Sim approach, executing controllers trained in Isaac Lab within the Gazebo simulator. The virtual Unitree Go2 and Go2W robots are equipped with a Livox Mid-360 LiDAR. The mounting position of the LiDAR is based on the [Unitree developer documentation](https://support.unitree.com/home/en/developer/SLAM%20and%20Navigation_service).
+This project follows a Sim-to-Sim approach, executing controllers trained in Isaac Lab within the Gazebo simulator. The virtual Unitree Go2 and Go2W robots are equipped with a  LiDAR. The mounting position of the Velodyne VLP16 LiDAR is based on the [Unitree developer documentation](https://support.unitree.com/home/en/developer/SLAM%20and%20Navigation_service).
 
 ## Prerequisites
 
