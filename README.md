@@ -14,16 +14,8 @@ Before you begin, ensure you have the following dependencies installed:
 
 1.  **ROS 2 Humble:** Please follow the official installation instructions.
 
-2.  **Livox SDK2:**
-    ```bash
-    git clone https://github.com/Livox-SDK/Livox-SDK2.git
-    cd Livox-SDK2
-    mkdir build && cd build
-    cmake .. && make
-    sudo make install
-    ```
 
-3.  **Required ROS 2 Packages:**
+2.  **Required ROS 2 Packages:**
     ```bash
     sudo apt update && sudo apt install -y \
       ros-humble-teleop-twist-keyboard \
@@ -40,7 +32,7 @@ Before you begin, ensure you have the following dependencies installed:
       ros-humble-octomap-rviz-plugins\
     ```
 
-4.  **LibTorch (C++):**
+3.  **LibTorch (C++):**
     ```bash
     # Choose a directory to store the library
     mkdir -p ~/libs && cd ~/libs
@@ -51,7 +43,7 @@ Before you begin, ensure you have the following dependencies installed:
     source ~/.bashrc
     ```
 
-5.  **yaml-cpp and lcm:**
+4.  **yaml-cpp and lcm:**
     ```bash
     sudo apt install -y liblcm-dev libyaml-cpp-dev
     ```
@@ -141,14 +133,8 @@ This example demonstrates how to control the robot's movement using keyboard com
 2. **OpenRMF support**  
    - Incorporate [Open-RMF](https://www.open-rmf.org/) functionality for fleet and task management
 
-3. **Minor bug fixes**  
-   - Verify and correct PCD positioning  
-   - ![LiDAR bug](image/lidar_bug.png)  
-   - **Hot Fix!** To minimize distortion of the Livox Mid-360, set `min_range = 0`.  
-     See the discussion here: [Livox-SDK/livox_laser_simulation#19](https://github.com/Livox-SDK/livox_laser_simulation/issues/19)
 
-
-4. **RL model update**  
+3. **RL model update**  
    - Modify reinforcement learning to account for LiDAR weight
 
 ## License
@@ -159,6 +145,7 @@ In addition, the following components are based on forked repositories with modi
 
 - Controller module is forked and adapted from [fan-ziqi/rl_sar](https://github.com/fan-ziqi/rl_sar)  
 - Gazebo simulation for the Livox Mid-360 is forked and adapted from [LCAS/livox_laser_simulation_ros2](https://github.com/LCAS/livox_laser_simulation_ros2)
+- Gazebo simulation for the Velodyne LiDAR is forked and adapted from [lmark1/velodyne_simulator](https://github.com/lmark1/velodyne_simulator)
 
 Each of these components follows the respective license of the original repository.
 
