@@ -1,0 +1,10 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    door_pos_controller:
+      type: position_controllers/JointGroupPositionController
+      joints: [right_joint, left_joint]

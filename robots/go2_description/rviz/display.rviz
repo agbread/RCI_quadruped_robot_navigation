@@ -196,7 +196,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        base:
+        base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -205,16 +205,30 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        livox_frame:
+        livox_imu_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         radar:
           Alpha: 1
           Show Axes: false
           Show Trail: false
         trunk:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vlp16:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vlp16_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vlp16_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -257,14 +271,14 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /livox/lidar/pointcloud
+        Value: /velodyne_points
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -322,10 +336,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.24039843678474426
+      Pitch: 0.24539843201637268
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.238582611083984
+      Yaw: 5.233582496643066
     Saved: ~
 Window Geometry:
   Displays:

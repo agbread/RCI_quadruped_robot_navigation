@@ -320,7 +320,7 @@
 
     </xacro:if>
 
-    <gazebo reference="base">
+    <gazebo reference="base_link">
         <turnGravityOff>false</turnGravityOff>
     </gazebo>
 

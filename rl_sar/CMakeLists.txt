@@ -245,7 +245,7 @@ install(PROGRAMS
 )
 
 install(
-    DIRECTORY launch worlds policy
+    DIRECTORY launch worlds config policy
     DESTINATION share/${PROJECT_NAME}/${dir}
 )
 
