@@ -81,8 +81,6 @@
           <model name="L1_door3" />
           <model name="L1_door4" />
           <model name="L1_door5" />
-          <model name="ShaftDoor_Lift1_L1_lift1_door" />
-          <model name="ShaftDoor_Lift2_L1_lift2_door" />
         </floor>
         <floor name="L2" model_name="hotel_L2">
           <model name="OpenRobotics/NormalBed" />
@@ -151,8 +149,6 @@
           <model name="L2_door12" />
           <model name="L2_door14" />
           <model name="L2_door15" />
-          <model name="ShaftDoor_Lift1_L2_lift1_door" />
-          <model name="ShaftDoor_Lift2_L2_lift2_door" />
         </floor>
         <floor name="L3" model_name="hotel_L3">
           <model name="OpenRobotics/NormalBed_18" />
@@ -217,8 +213,6 @@
           <model name="L3_door12" />
           <model name="L3_door14" />
           <model name="L3_door15" />
-          <model name="ShaftDoor_Lift1_L3_lift1_door" />
-          <model name="ShaftDoor_Lift2_L3_lift2_door" />
         </floor>
       </plugin>
     </gui>
@@ -2514,345 +2508,6 @@
       <uri>model://hotel_L3</uri>
       <pose>0 0 16.0 0 0 0</pose>
     </include>
-    <model name="ShaftDoor_Lift1_L1_lift1_door">
-      <pose>19.766468308668816 -20.331265422387034 0.0 0 0 0.0</pose>
-      <link name="right_door">
-        <pose>0.425 0 1.25 0 0 0</pose>
-        <visual name="right_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="right_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="right_joint" type="prismatic">
-        <parent>world</parent>
-        <child>right_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>0</lower>
-            <upper>0.85</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="left_door">
-        <pose>-0.425 0 1.25 0 0 0</pose>
-        <visual name="left_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="left_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="left_joint" type="prismatic">
-        <parent>world</parent>
-        <child>left_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>-0.85</lower>
-            <upper>0</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="ramp">
-        <pose>0 0 -0.025 0 0 0</pose>
-        <visual name="ramp_visual">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="ramp_collision">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="ramp_joint" type="fixed">
-        <parent>world</parent>
-        <child>ramp</child>
-      </joint>
-    </model>
-    <model name="ShaftDoor_Lift1_L2_lift1_door">
-      <pose>19.766468308668816 -20.331265422387034 8.0 0 0 0.0</pose>
-      <link name="right_door">
-        <pose>0.425 0 1.25 0 0 0</pose>
-        <visual name="right_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="right_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="right_joint" type="prismatic">
-        <parent>world</parent>
-        <child>right_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>0</lower>
-            <upper>0.85</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="left_door">
-        <pose>-0.425 0 1.25 0 0 0</pose>
-        <visual name="left_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="left_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="left_joint" type="prismatic">
-        <parent>world</parent>
-        <child>left_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>-0.85</lower>
-            <upper>0</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="ramp">
-        <pose>0 0 -0.025 0 0 0</pose>
-        <visual name="ramp_visual">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="ramp_collision">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="ramp_joint" type="fixed">
-        <parent>world</parent>
-        <child>ramp</child>
-      </joint>
-    </model>
-    <model name="ShaftDoor_Lift1_L3_lift1_door">
-      <pose>19.766468308668816 -20.331265422387034 16.0 0 0 0.0</pose>
-      <link name="right_door">
-        <pose>0.425 0 1.25 0 0 0</pose>
-        <visual name="right_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="right_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="right_joint" type="prismatic">
-        <parent>world</parent>
-        <child>right_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>0</lower>
-            <upper>0.85</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="left_door">
-        <pose>-0.425 0 1.25 0 0 0</pose>
-        <visual name="left_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="left_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="left_joint" type="prismatic">
-        <parent>world</parent>
-        <child>left_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>-0.85</lower>
-            <upper>0</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="ramp">
-        <pose>0 0 -0.025 0 0 0</pose>
-        <visual name="ramp_visual">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="ramp_collision">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="ramp_joint" type="fixed">
-        <parent>world</parent>
-        <child>ramp</child>
-      </joint>
-    </model>
     <model name="Lift1">
       <link name="platform">
         <gravity>false</gravity>
@@ -3032,430 +2687,116 @@
         <child>platform</child>
         <axis>
           <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0.0</lower>
+            <upper>16.0</upper>   
+            <effort>1e6</effort>
+          </limit>
+          <dynamics damping="80.0" friction="1.0"/>
         </axis>
       </joint>
-      <model name="CabinDoor_Lift1_lift1_door">
-        <pose>0.0 -1.3250000000000002 0 0 0 0.0</pose>
-        <link name="right_door">
-          <pose>0.425 0 1.25 0 0 0</pose>
-          <visual name="right_door_visual">
-            <geometry>
-              <box>
-                <size>0.85 0.03 2.5</size>
-              </box>
-            </geometry>
-            <material>
-              <ambient>0.5 0.5 0.5 1</ambient>
-              <diffuse>0.7 0.7 0.7 1</diffuse>
-              <specular>0.6 0.6 0.6 1</specular>
-              <emissive>0.1 0.1 0.1 1</emissive>
-            </material>
-          </visual>
-          <collision name="right_door_collision">
-            <geometry>
-              <box>
-                <size>0.85 0.03 2.5</size>
-              </box>
-            </geometry>
-            <surface>
-              <contact>
-                <collide_bitmask>0x02</collide_bitmask>
-              </contact>
-            </surface>
-          </collision>
-        </link>
-        <joint name="right_joint" type="prismatic">
-          <parent>platform</parent>
-          <child>right_door</child>
-          <axis>
-            <xyz>1 0 0</xyz>
-            <limit>
-              <lower>0</lower>
-              <upper>0.85</upper>
-            </limit>
-          </axis>
-        </joint>
-        <link name="left_door">
-          <pose>-0.425 0 1.25 0 0 0</pose>
-          <visual name="left_door_visual">
-            <geometry>
-              <box>
-                <size>0.85 0.03 2.5</size>
-              </box>
-            </geometry>
-            <material>
-              <ambient>0.5 0.5 0.5 1</ambient>
-              <diffuse>0.7 0.7 0.7 1</diffuse>
-              <specular>0.6 0.6 0.6 1</specular>
-              <emissive>0.1 0.1 0.1 1</emissive>
-            </material>
-          </visual>
-          <collision name="left_door_collision">
-            <geometry>
-              <box>
-                <size>0.85 0.03 2.5</size>
-              </box>
-            </geometry>
-            <surface>
-              <contact>
-                <collide_bitmask>0x02</collide_bitmask>
-              </contact>
-            </surface>
-          </collision>
-        </link>
-        <joint name="left_joint" type="prismatic">
-          <parent>platform</parent>
-          <child>left_door</child>
-          <axis>
-            <xyz>1 0 0</xyz>
-            <limit>
-              <lower>-0.85</lower>
-              <upper>0</upper>
-            </limit>
-          </axis>
-        </joint>
-        </model>
+      <link name="right_door">
+        <pose>0.425 -1.3250000000000002 1.25 0 0 0</pose>
+        <visual name="right_door_visual">
+          <geometry>
+            <box>
+              <size>0.85 0.03 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.6 0.6 0.6 1</specular>
+            <emissive>0.1 0.1 0.1 1</emissive>
+          </material>
+        </visual>
+        <collision name="right_door_collision">
+          <geometry>
+            <box>
+              <size>0.85 0.03 2.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>0x02</collide_bitmask>
+            </contact>
+          </surface>
+        </collision>
+      </link>
+      <joint name="right_joint" type="prismatic">
+        <parent>platform</parent>
+        <child>right_door</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0.85</upper>
+          </limit>
+          <dynamics damping="10.0"/>
+        </axis>
+      </joint>
+      <link name="left_door">
+        <pose>-0.425 -1.3250000000000002 1.25 0 0 0</pose>
+        <visual name="left_door_visual">
+          <geometry>
+            <box>
+              <size>0.85 0.03 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.6 0.6 0.6 1</specular>
+            <emissive>0.1 0.1 0.1 1</emissive>
+          </material>
+        </visual>
+        <collision name="left_door_collision">
+          <geometry>
+            <box>
+              <size>0.85 0.03 2.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>0x02</collide_bitmask>
+            </contact>
+          </surface>
+        </collision>
+      </link>
+      <joint name="left_joint" type="prismatic">
+        <parent>platform</parent>
+        <child>left_door</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-0.85</lower>
+            <upper>0</upper>
+          </limit>
+          <dynamics damping="10.0"/>
+        </axis>
+      </joint>
+      <plugin name="lift1_elevator_plugin" filename="libelevator_plugin.so">
+        <ros>
+          <namespace>/lift1</namespace>  
+        </ros>
+        <cabin_joint>cabin_joint</cabin_joint>
+        <right_joint>right_joint</right_joint>
+        <left_joint>left_joint</left_joint>
+        <floor_heights>0.0 8.0 16.0</floor_heights>   
+        <door_open_distance>0.85</door_open_distance>
+        <kp>300.0</kp>
+        <kd>120.0</kd>
+        <vel_limit>0.6</vel_limit>       <!-- m/s -->
+        <acc_limit>1.0</acc_limit>       <!-- m/s^2 -->
+        <pos_tolerance>0.007</pos_tolerance> <!-- m -->
+        <pos_tolerance_hyst>0.018</pos_tolerance_hyst>
+        <kv_hold>250.0</kv_hold>
+        <kd_hold>5.0</kd_hold>
+        <kp_hold_force>9000.0</kp_hold_force>
+        <c_hold_force>13000.0</c_hold_force>
+      </plugin>
       <pose>19.766468308668816 -18.931265422387035 0 0 0 0.0</pose>
-    </model>
-    <model name="ShaftDoor_Lift2_L1_lift2_door">
-      <pose>16.982458687729547 -22.82088370217165 0.0 0 0 0.0</pose>
-      <link name="right_door">
-        <pose>0.425 0 1.25 0 0 0</pose>
-        <visual name="right_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="right_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="right_joint" type="prismatic">
-        <parent>world</parent>
-        <child>right_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>0</lower>
-            <upper>0.85</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="left_door">
-        <pose>-0.425 0 1.25 0 0 0</pose>
-        <visual name="left_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="left_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="left_joint" type="prismatic">
-        <parent>world</parent>
-        <child>left_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>-0.85</lower>
-            <upper>0</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="ramp">
-        <pose>0 0 -0.025 0 0 0</pose>
-        <visual name="ramp_visual">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="ramp_collision">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="ramp_joint" type="fixed">
-        <parent>world</parent>
-        <child>ramp</child>
-      </joint>
-    </model>
-    <model name="ShaftDoor_Lift2_L2_lift2_door">
-      <pose>16.982458687729547 -22.82088370217165 8.0 0 0 0.0</pose>
-      <link name="right_door">
-        <pose>0.425 0 1.25 0 0 0</pose>
-        <visual name="right_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="right_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="right_joint" type="prismatic">
-        <parent>world</parent>
-        <child>right_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>0</lower>
-            <upper>0.85</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="left_door">
-        <pose>-0.425 0 1.25 0 0 0</pose>
-        <visual name="left_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="left_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="left_joint" type="prismatic">
-        <parent>world</parent>
-        <child>left_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>-0.85</lower>
-            <upper>0</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="ramp">
-        <pose>0 0 -0.025 0 0 0</pose>
-        <visual name="ramp_visual">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="ramp_collision">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="ramp_joint" type="fixed">
-        <parent>world</parent>
-        <child>ramp</child>
-      </joint>
-    </model>
-    <model name="ShaftDoor_Lift2_L3_lift2_door">
-      <pose>16.982458687729547 -22.82088370217165 16.0 0 0 0.0</pose>
-      <link name="right_door">
-        <pose>0.425 0 1.25 0 0 0</pose>
-        <visual name="right_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="right_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="right_joint" type="prismatic">
-        <parent>world</parent>
-        <child>right_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>0</lower>
-            <upper>0.85</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="left_door">
-        <pose>-0.425 0 1.25 0 0 0</pose>
-        <visual name="left_door_visual">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="left_door_collision">
-          <geometry>
-            <box>
-              <size>0.85 0.03 2.5</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="left_joint" type="prismatic">
-        <parent>world</parent>
-        <child>left_door</child>
-        <axis>
-          <xyz>1 0 0</xyz>
-          <limit>
-            <lower>-0.85</lower>
-            <upper>0</upper>
-          </limit>
-        </axis>
-      </joint>
-      <link name="ramp">
-        <pose>0 0 -0.025 0 0 0</pose>
-        <visual name="ramp_visual">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.5 0.5 0.5 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
-            <specular>0.6 0.6 0.6 1</specular>
-            <emissive>0.1 0.1 0.1 1</emissive>
-          </material>
-        </visual>
-        <collision name="ramp_collision">
-          <geometry>
-            <box>
-              <size>1.7 0.1 0.05</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <collide_bitmask>0x02</collide_bitmask>
-            </contact>
-          </surface>
-        </collision>
-      </link>
-      <joint name="ramp_joint" type="fixed">
-        <parent>world</parent>
-        <child>ramp</child>
-      </joint>
-    </model>
+    </model>    
     <model name="Lift2">
       <link name="platform">
         <gravity>false</gravity>
@@ -3635,96 +2976,115 @@
         <child>platform</child>
         <axis>
           <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0.0</lower>
+            <upper>16.0</upper>   <!-- 층 높이 합(0, 3, 6) 기준 -->
+            <effort>1e6</effort>
+          </limit>
+          <dynamics damping="80.0" friction="1.0"/>
         </axis>
       </joint>
-      <model name="CabinDoor_Lift2_lift2_door">
-        <pose>0.0 1.3250000000000002 0 0 0 0.0</pose>
-        <link name="right_door">
-          <pose>0.425 0 1.25 0 0 0</pose>
-          <visual name="right_door_visual">
-            <geometry>
-              <box>
-                <size>0.85 0.03 2.5</size>
-              </box>
-            </geometry>
-            <material>
-              <ambient>0.5 0.5 0.5 1</ambient>
-              <diffuse>0.7 0.7 0.7 1</diffuse>
-              <specular>0.6 0.6 0.6 1</specular>
-              <emissive>0.1 0.1 0.1 1</emissive>
-            </material>
-          </visual>
-          <collision name="right_door_collision">
-            <geometry>
-              <box>
-                <size>0.85 0.03 2.5</size>
-              </box>
-            </geometry>
-            <surface>
-              <contact>
-                <collide_bitmask>0x02</collide_bitmask>
-              </contact>
-            </surface>
-          </collision>
-        </link>
-        <joint name="right_joint" type="prismatic">
-          <parent>platform</parent>
-          <child>right_door</child>
-          <axis>
-            <xyz>1 0 0</xyz>
-            <limit>
-              <lower>0</lower>
-              <upper>0.85</upper>
-            </limit>
-          </axis>
-        </joint>
-        <link name="left_door">
-          <pose>-0.425 0 1.25 0 0 0</pose>
-          <visual name="left_door_visual">
-            <geometry>
-              <box>
-                <size>0.85 0.03 2.5</size>
-              </box>
-            </geometry>
-            <material>
-              <ambient>0.5 0.5 0.5 1</ambient>
-              <diffuse>0.7 0.7 0.7 1</diffuse>
-              <specular>0.6 0.6 0.6 1</specular>
-              <emissive>0.1 0.1 0.1 1</emissive>
-            </material>
-          </visual>
-          <collision name="left_door_collision">
-            <geometry>
-              <box>
-                <size>0.85 0.03 2.5</size>
-              </box>
-            </geometry>
-            <surface>
-              <contact>
-                <collide_bitmask>0x02</collide_bitmask>
-              </contact>
-            </surface>
-          </collision>
-        </link>
-        <joint name="left_joint" type="prismatic">
-          <parent>platform</parent>
-          <child>left_door</child>
-          <axis>
-            <xyz>1 0 0</xyz>
-            <limit>
-              <lower>-0.85</lower>
-              <upper>0</upper>
-            </limit>
-          </axis>
-        </joint>
-        </model>
+      <link name="right_door">
+        <pose>0.425 1.3250000000000002 1.25 0 0 0</pose>
+        <visual name="right_door_visual">
+          <geometry>
+            <box>
+              <size>0.85 0.03 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.6 0.6 0.6 1</specular>
+            <emissive>0.1 0.1 0.1 1</emissive>
+          </material>
+        </visual>
+        <collision name="right_door_collision">
+          <geometry>
+            <box>
+              <size>0.85 0.03 2.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>0x02</collide_bitmask>
+            </contact>
+          </surface>
+        </collision>
+      </link>
+      <joint name="right_joint" type="prismatic">
+        <parent>platform</parent>
+        <child>right_door</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0.85</upper>
+          </limit>
+          <dynamics damping="10.0"/>
+        </axis>
+      </joint>
+      <link name="left_door">
+        <pose>-0.425 1.3250000000000002 1.25 0 0 0</pose>
+        <visual name="left_door_visual">
+          <geometry>
+            <box>
+              <size>0.85 0.03 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.6 0.6 0.6 1</specular>
+            <emissive>0.1 0.1 0.1 1</emissive>
+          </material>
+        </visual>
+        <collision name="left_door_collision">
+          <geometry>
+            <box>
+              <size>0.85 0.03 2.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>0x02</collide_bitmask>
+            </contact>
+          </surface>
+        </collision>
+      </link>
+      <joint name="left_joint" type="prismatic">
+        <parent>platform</parent>
+        <child>left_door</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-0.85</lower>
+            <upper>0</upper>
+          </limit>
+          <dynamics damping="10.0"/>
+        </axis>
+      </joint>
       <pose>16.982458687729547 -24.220883702171648 0 0 0 0.0</pose>
+      <plugin name="lift2_elevator_plugin" filename="libelevator_plugin.so">
+        <ros>
+          <namespace>/lift2</namespace>  
+        </ros>
+        <cabin_joint>cabin_joint</cabin_joint>
+        <right_joint>right_joint</right_joint>
+        <left_joint>left_joint</left_joint>
+        <floor_heights>0.0 8.0 16.0</floor_heights>   
+        <door_open_distance>0.85</door_open_distance>
+        <kp>300.0</kp>
+        <kd>120.0</kd>
+        <vel_limit>0.6</vel_limit>       <!-- m/s -->
+        <acc_limit>1.0</acc_limit>       <!-- m/s^2 -->
+        <pos_tolerance>0.007</pos_tolerance> <!-- m -->
+        <pos_tolerance_hyst>0.018</pos_tolerance_hyst>
+        <kv_hold>250.0</kv_hold>
+        <kd_hold>5.0</kd_hold>
+        <kp_hold_force>9000.0</kp_hold_force>
+        <c_hold_force>13000.0</c_hold_force>
+      </plugin>
     </model>
-    <rmf_charger_waypoints name="charger_waypoints">
-      <rmf_vertex name="cleanerbot_charger2" x="29.239395125069194" y="-27.6631445578858" level="L1" />
-      <rmf_vertex name="cleanerbot_charger1" x="26.364960871641816" y="-27.752566946910367" level="L1" />
-      <rmf_vertex name="tinybot_charger" x="23.541641034854884" y="-27.420434599132314" level="L1" />
-      <rmf_vertex name="deliverybot_charger" x="14.55719654654451" y="-38.97630173372704" level="L1" />
-    </rmf_charger_waypoints>
   </world>
 </sdf>

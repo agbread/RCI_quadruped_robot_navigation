@@ -110,7 +110,8 @@ RL_Sim::RL_Sim() : rclcpp::Node("rl_sim_node")
     // keyboard
     this->loop_keyboard = std::make_shared<LoopFunc>("loop_keyboard", 0.05, std::bind(&RL_Sim::KeyboardInterface, this));
     this->loop_keyboard->start();
-
+    
+    // here
     // action server
     using namespace std::placeholders;
     this->activation_server_ = rclcpp_action::create_server<RobotActivation>(
@@ -133,6 +134,8 @@ RL_Sim::RL_Sim() : rclcpp::Node("rl_sim_node")
         std::bind(&RL_Sim::handle_goal_navigation_mode, this, _1, _2),
         std::bind(&RL_Sim::handle_cancel_navigation_mode, this, _1),
         std::bind(&RL_Sim::handle_accepted_navigation_mode, this, _1));
+    // here
+    std::cout << LOGGER::INFO << "set navigation" << std::endl;
 
 #ifdef PLOT
     this->plot_t = std::vector<int>(this->plot_size, 0);
@@ -161,7 +164,7 @@ RL_Sim::~RL_Sim()
     std::cout << LOGGER::INFO << "RL_Sim exit" << std::endl;
 }
 
-#if defined(USE_ROS2)
+// here
 // RobotActivation Action Server
 rclcpp_action::GoalResponse RL_Sim::handle_goal_activation(
     const rclcpp_action::GoalUUID & uuid,
@@ -339,7 +342,8 @@ void RL_Sim::execute_navigation_mode(
     goal_handle->succeed(result);
     RCLCPP_INFO(this->get_logger(), "SetNavigationMode goal succeeded");
 }
-#endif
+// here
+
 
 void RL_Sim::StartJointController(const std::string& ros_namespace, const std::vector<std::string>& names)
 {
@@ -435,7 +439,7 @@ void RL_Sim::RobotControl()
         auto result = this->gazebo_reset_world_client->async_send_request(empty_request);
         this->control.current_keyboard = this->control.last_keyboard;
     }
-    if (this->control.current_keyboard == Input::Keyboard::Enter || this->control.current_gamepad == Input::Gamepad::RB_X)
+    if (this->control.current_keyboard == Input::Keyboard::P || this->control.current_gamepad == Input::Gamepad::RB_X)
     {
         if (simulation_running)
         {
@@ -493,6 +497,7 @@ void RL_Sim::RobotControl()
             this->control.y = 0;
             this->control.yaw = 0;
             this->control.current_keyboard = this->control.last_keyboard;
+            std::cout << std::endl << LOGGER::INFO << "Space " << std::endl;
         }
         if (this->control.current_keyboard == Input::Keyboard::N || this->control.current_gamepad == Input::Gamepad::X)
         {

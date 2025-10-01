@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<robot name="lift1">
+  <!-- 링크들 (관성/비주얼 없어도 RSP는 OK) -->
+  <link name="world"/>
+  <link name="platform"/>
+  <link name="right_door"/>
+  <link name="left_door"/>

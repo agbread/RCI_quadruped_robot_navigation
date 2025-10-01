@@ -71,6 +71,7 @@ Before you begin, ensure you have the following dependencies installed:
     source ~/.bashrc
     ```
 
+
 ## Usage
 
 Follow these steps to launch the simulation and control the robot. Each command should be run in a new terminal.
@@ -100,6 +101,52 @@ Follow these steps to launch the simulation and control the robot. Each command 
     ros2 run rl_action command
     ```
 
+4. **Elevator Control (Optional Feature)** 
+    This repository includes a Gazebo **Elevator Plugin** to simulate multi-floor vertical transport. 
+    See below for detailed usage instructions.
+
+    #### Elevator Plugin Usage
+
+    This plugin allows you to simulate an elevator system inside the Gazebo environment using ROS 2 topics. 
+    The elevator supports floor indexing, precise height targeting, and door open/close commands.
+
+    #### Topics
+
+    Assuming `<namespace>/ = /lift1`:
+
+    **Commands**
+    - `/lift1/cmd_floor` (`std_msgs/Int32`): floor index (0-based) from `<floor_heights>`
+    - `/lift1/cmd_z` (`std_msgs/Float64`): absolute target height in meters
+    - `/lift1/door_open` (`std_msgs/Bool`): `true` = open, `false` = close
+
+    **Status**
+    - `/lift1/cabin_z` (`std_msgs/Float64`): measured cabin Z
+    - `/lift1/door_pos` (`std_msgs/Float64MultiArray`): `[right, left]` joint positions
+
+    #### Examples
+
+    <details>
+    <summary>Click to expand</summary>
+
+    ```bash
+    # Move by floor index
+    ros2 topic pub /lift1/cmd_floor std_msgs/msg/Int32 "{data: 0}"
+    ros2 topic pub /lift1/cmd_floor std_msgs/msg/Int32 "{data: 1}"
+    ros2 topic pub /lift1/cmd_floor std_msgs/msg/Int32 "{data: 2}"
+
+    # Move to absolute height (meters)
+    ros2 topic pub /lift1/cmd_z std_msgs/msg/Float64 "{data: 3.0}"
+
+    # Open / close doors
+    ros2 topic pub /lift1/door_open std_msgs/msg/Bool "{data: true}"
+    ros2 topic pub /lift1/door_open std_msgs/msg/Bool "{data: false}"
+
+    # Monitor
+    ros2 topic echo /lift1/cabin_z
+    ros2 topic echo /lift1/door_pos
+    ```
+
+
 ## Example: Teleoperation Control
 
 This example demonstrates how to control the robot's movement using keyboard commands.
@@ -124,7 +171,8 @@ This example demonstrates how to control the robot's movement using keyboard com
     (csuite) activation false
     (csuite) quit
     ```
-    
+
+
 ## TodoList 
 
 1. **Navigation integration**  
@@ -144,9 +192,8 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 In addition, the following components are based on forked repositories with modifications:
 
 - Controller module is forked and adapted from [fan-ziqi/rl_sar](https://github.com/fan-ziqi/rl_sar)  
-- Gazebo simulation for the Livox Mid-360 is forked and adapted from [LCAS/livox_laser_simulation_ros2](https://github.com/LCAS/livox_laser_simulation_ros2)
 
-Each of these components follows the respective license of the original repository.
+This component follows the license of the original repository.
 
 
 
