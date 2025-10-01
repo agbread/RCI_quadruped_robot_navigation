@@ -106,7 +106,7 @@ Follow these steps to launch the simulation and control the robot. Each command 
     This repository includes a Gazebo **Elevator Plugin** to simulate multi-floor vertical transport. 
     See below for detailed usage instructions.
 
-   [elevator_plugin_2X.webm](https://github.com/user-attachments/assets/45975e2a-61a9-4e56-a147-27a4198a67a7)
+    [elevator_operation.webm](https://github.com/user-attachments/assets/ebee5ab0-2536-4f3f-958d-5169d15cb298)
 
     #### Elevator Plugin Usage
 
