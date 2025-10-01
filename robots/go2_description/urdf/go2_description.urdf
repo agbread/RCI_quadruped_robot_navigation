@@ -671,7 +671,7 @@ Stephen Brawner (brawner@gmail.com)
     </inertial>
   </link>
   <joint name="livox_imu_joint" type="fixed">
-    <origin xyz="0.16143 0 0.12262" rpy="0 0.22689 0"/>
+    <origin xyz="-0.02557 0 0.04232" rpy="0 0 0" />
     <parent link="base_link" />
     <child link="livox_imu_link" />
     <axis xyz="0 0 0" />

@@ -5,16 +5,10 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    door_controller:
+    lift_position_controller:
       type: position_controllers/JointGroupPositionController
+      joints: [cabin_joint]
 
-door_controller:
-  ros__parameters:
-    joints:
-      - right_joint
-      - left_joint
-    command_interfaces:
-      - position
-    state_interfaces:
-      - position
-      - velocity
+    door_position_controller:
+      type: position_controllers/JointGroupPositionController
+      joints: [right_joint, left_joint]
