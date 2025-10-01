@@ -106,12 +106,12 @@ Follow these steps to launch the simulation and control the robot. Each command 
     This repository includes a Gazebo **Elevator Plugin** to simulate multi-floor vertical transport. 
     See below for detailed usage instructions.
 
-    ### Elevator Plugin Usage
+    #### Elevator Plugin Usage
 
     This plugin allows you to simulate an elevator system inside the Gazebo environment using ROS 2 topics. 
     The elevator supports floor indexing, precise height targeting, and door open/close commands.
 
-    #### Topics
+    ##### Topics
 
     Assuming `<namespace>/ = /lift1`:
 
@@ -124,7 +124,7 @@ Follow these steps to launch the simulation and control the robot. Each command 
     - `/lift1/cabin_z` (`std_msgs/Float64`): measured cabin Z
     - `/lift1/door_pos` (`std_msgs/Float64MultiArray`): `[right, left]` joint positions
 
-    #### Examples
+    ##### Examples
 
     <details>
     <summary>Click to expand</summary>
