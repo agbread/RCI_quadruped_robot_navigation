@@ -69,7 +69,15 @@ public:
     exit_tol_  = sdf->HasElement("pos_tolerance_hyst")
                    ? sdf->Get<double>("pos_tolerance_hyst")
                    : 2.0 * enter_tol_;    
-    
+    // ---- Ramp params (slide only) ----
+    if (sdf->HasElement("ramp_slide_joint")) ramp_slide_joint_name_ = sdf->Get<std::string>("ramp_slide_joint");
+    if (sdf->HasElement("ramp_extend"))      ramp_extend_           = sdf->Get<double>("ramp_extend");
+    if (sdf->HasElement("ramp_retract"))     ramp_retract_          = sdf->Get<double>("ramp_retract");
+    if (sdf->HasElement("ramp_kp"))          ramp_kp_               = sdf->Get<double>("ramp_kp");
+    if (sdf->HasElement("ramp_kd"))          ramp_kd_               = sdf->Get<double>("ramp_kd");
+    if (sdf->HasElement("ramp_auto"))        ramp_auto_             = sdf->Get<bool>("ramp_auto");
+    if (sdf->HasElement("spawn_settle_time"))spawn_settle_time_     = sdf->Get<double>("spawn_settle_time");
+
     // ===== Get joints =====
     jc_ = model_->GetJointController();
 
@@ -91,6 +99,17 @@ public:
     cabin_scoped_ = cj->GetScopedName();
     right_scoped_ = rj->GetScopedName();
     left_scoped_  = lj->GetScopedName();
+
+    // ---- Ramp slide joint ----
+    if (auto sj = model_->GetJoint(ramp_slide_joint_name_)) {
+      ramp_slide_scoped_ = sj->GetScopedName();
+      jc_->SetPositionPID(ramp_slide_scoped_, common::PID(ramp_kp_, 0.0, ramp_kd_));
+      jc_->SetPositionTarget(ramp_slide_scoped_, ramp_retract_);   // 시작은 수납
+    } else {
+      RCLCPP_WARN(ros_node_->get_logger(), "Ramp slide joint [%s] not found", ramp_slide_joint_name_.c_str());
+    }
+    start_time_ = world_->SimTime();
+
 
     // Read platform mass (optional, 튜닝 참고용)
     if (auto link = model_->GetLink("platform")) {
@@ -173,6 +192,9 @@ private:
     const double l = msg->data ? -door_open_dist_ : 0.0;  // left door
     jc_->SetPositionTarget(right_scoped_, r);
     jc_->SetPositionTarget(left_scoped_,  l);
+
+    if (!ramp_slide_scoped_.empty())
+      jc_->SetPositionTarget(ramp_slide_scoped_, msg->data ? ramp_extend_ : ramp_retract_);
   }
 
   // === OnUpdate() : Arrival/Hold 래치 버전 ===
@@ -255,7 +277,6 @@ private:
       }
     }
 
-
     // 상태 publish (문 상태 포함 — 기존 코드 유지)
     std_msgs::msg::Float64 zmsg; zmsg.data = z_meas;
     pub_cabin_z_->publish(zmsg);
@@ -305,6 +326,16 @@ private:
   double kp_hold_force_{10000.0};  // [N/m]  (데드밴드 밖에서만 작동)
   double c_hold_force_{7000.0};    // [N·s/m] 점성 댐핑 (≈ 2*sqrt(k*m)) 권장
   double m_platform_{0.0};         // [kg]   플랫폼 질량(옵션)
+
+  // ---- Sliding ramp (1-DOF) ----
+  std::string ramp_slide_joint_name_{"ramp_slide_joint"};
+  std::string ramp_slide_scoped_;
+  double ramp_extend_{0.55}, ramp_retract_{0.0};   // [m]
+  double ramp_kp_{200.0}, ramp_kd_{20.0};          // 슬라이드용 PID
+  bool   ramp_auto_{true};                         // 도착+문열림 시 자동 전개
+  double spawn_settle_time_{0.3};                  // 스폰 직후 N초는 고정
+  gazebo::common::Time start_time_;
+
 
   // Motion profile parameters & state
   double v_max_{0.6};   // [m/s]   S-curve/trapezoid max velocity (SDF: <vel_limit>)
