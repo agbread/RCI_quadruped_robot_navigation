@@ -1,0 +1,155 @@
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+
+    <!-- 무한 층 루프 -->
+    <Repeat num_cycles="-1">
+      <!-- floor_list를 순회하며 floor / next_floor를 블랙보드에 SET -->
+      <ForEachFloor floor_list="{floor_list}">
+        <Sequence name="Patrol_One_Floor">
+
+          <!-- A) 경유점 선택 (full/partial + subset 반영) -->
+          <ComputePlan
+              patrol_mode="{patrol_mode}"
+              waypoints="{waypoints}"
+              subset="{subset}"
+              floor="{floor}"
+              out_plan="{plan}"/>
+
+          <!-- B) 층 내 순찰 -->
+          <RetryUntilSuccessful num_attempts="2">
+            <FollowWaypoints
+                input_plan="{plan}"
+                action_name="{topics.follow_waypoints_action}"/>
+          </RetryUntilSuccessful>
+
+          <!-- C) 엘리베이터 선택 & 문앞 접근 -->
+          <ChooseLift
+              lifts="{lifts}"
+              elevator_front="{elevator_front}"
+              floor="{floor}"
+              out_lift_id="{lift_id}"/>
+
+          <GoToElevatorFront
+              lift_id="{lift_id}"
+              floor="{floor}"
+              elevator_front="{elevator_front}"
+              action_name="{topics.follow_waypoints_action}"/>
+
+          <!-- D) 문 열림 확보 (열려있으면 통과) -->
+          <Fallback name="Ensure_Door_Open_Before_Boarding">
+            <IsDoorOpen
+                door_pos_topic_key="{elevator_topics.door_pos}"
+                lift_id="{lift_id}"
+                open_th="{elevator_params.door_open_threshold}"
+                close_th="{elevator_params.door_close_threshold}"
+                eps_equal="{elevator_params.eps_equal}"/>
+            <Sequence>
+              <OpenDoorIfPossible
+                  door_cmd_topic_key="{elevator_topics.door_cmd}"
+                  lift_id="{lift_id}"
+                  value="true"/>
+              <IsDoorProgress
+                  door_pos_topic_key="{elevator_topics.door_pos}"
+                  lift_id="{lift_id}"
+                  mode="opening"
+                  open_th="{elevator_params.door_open_threshold}"
+                  close_th="{elevator_params.door_close_threshold}"
+                  vel_eps="{elevator_params.vel_eps}"
+                  eps_equal="{elevator_params.eps_equal}"/>
+              <WaitDoorOpen
+                  door_pos_topic_key="{elevator_topics.door_pos}"
+                  lift_id="{lift_id}"
+                  open_th="{elevator_params.door_open_threshold}"
+                  close_th="{elevator_params.door_close_threshold}"
+                  vel_eps="{elevator_params.vel_eps}"
+                  eps_equal="{elevator_params.eps_equal}"
+                  timeout="{timeouts.door_open_sec}"/>
+            </Sequence>
+          </Fallback>
+
+          <!-- E) 캐빈 내부로 탑승 (B방법: 오프셋) -->
+          <EnterCabinOffset
+              lift_id="{lift_id}"
+              floor="{floor}"
+              elevator_front="{elevator_front}"
+              cabin_offset="{cabin_offset}"
+              action_name="{topics.follow_waypoints_action}"/>
+
+          <!-- F) 문 닫고 층 이동 -->
+          <OpenDoorIfPossible
+              door_cmd_topic_key="{elevator_topics.door_cmd}"
+              lift_id="{lift_id}"
+              value="false"/>
+          <WaitDoorClosed
+              door_pos_topic_key="{elevator_topics.door_pos}"
+              lift_id="{lift_id}"
+              open_th="{elevator_params.door_open_threshold}"
+              close_th="{elevator_params.door_close_threshold}"
+              vel_eps="{elevator_params.vel_eps}"
+              eps_equal="{elevator_params.eps_equal}"
+              timeout="10.0"/>
+
+          <PublishTargetFloor
+              lift_id="{lift_id}"
+              cmd_floor_topic_key="{elevator_topics.cmd_floor}"
+              next_floor="{next_floor}"/>
+
+          <WaitElevatorArrived
+              lift_id="{lift_id}"
+              cabin_z_topic_key="{elevator_topics.cabin_z}"
+              floor_heights="{elevator_params.floor_heights}"
+              z_tol="{elevator_params.z_arrival_tol}"
+              timeout="{timeouts.elevator_arrival_sec}"/>
+
+          <!-- G) 맵 스위치 (slam_toolbox 전용) -->
+          <MapSwitchSlamToolbox
+              slam_ns="{slam_ns}"
+              serialized_map="{serialized_map}"
+              floor="{next_floor}"
+              wait_map_ms="400"
+              clear_costmaps="true"/>
+
+          <!-- H) 도착 후 문 열림 확보 -->
+          <Fallback name="Ensure_Door_Open_After_Arrival">
+            <IsDoorOpen
+                door_pos_topic_key="{elevator_topics.door_pos}"
+                lift_id="{lift_id}"
+                open_th="{elevator_params.door_open_threshold}"
+                close_th="{elevator_params.door_close_threshold}"
+                eps_equal="{elevator_params.eps_equal}"/>
+            <Sequence>
+              <OpenDoorIfPossible
+                  door_cmd_topic_key="{elevator_topics.door_cmd}"
+                  lift_id="{lift_id}"
+                  value="true"/>
+              <WaitDoorOpen
+                  door_pos_topic_key="{elevator_topics.door_pos}"
+                  lift_id="{lift_id}"
+                  open_th="{elevator_params.door_open_threshold}"
+                  close_th="{elevator_params.door_close_threshold}"
+                  vel_eps="{elevator_params.vel_eps}"
+                  eps_equal="{elevator_params.eps_equal}"
+                  timeout="{timeouts.door_open_sec}"/>
+            </Sequence>
+          </Fallback>
+
+          <!-- I) 하차(복도측 엘리베이터 앞 포즈로) & 초기자세 찍기 -->
+          <ExitCabin
+              lift_id="{lift_id}"
+              elevator_front="{elevator_front}"
+              floor="{next_floor}"
+              action_name="{topics.follow_waypoints_action}"/>
+
+          <SetInitialPoseFromElevatorAnchor
+              lift_id="{lift_id}"
+              floor="{next_floor}"
+              door_anchor="{door_anchor}"
+              initialpose_topic="{topics.initialpose}"
+              relocalize_wait_sec="{timeouts.relocalize_wait_sec}"/>
+
+        </Sequence>
+      </ForEachFloor>
+    </Repeat>
+
+  </BehaviorTree>
+</root>

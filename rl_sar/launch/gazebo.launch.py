@@ -55,7 +55,7 @@ def generate_launch_description():
             "-entity", "robot_model",
             "-x", "20.0",
             "-y", "-35.0",
-            "-z", "8.0",
+            "-z", "16.0",
             "-Y", "0.0",
         ],
         output="screen",
