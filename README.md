@@ -5,7 +5,9 @@ This repository integrates reinforcement learning (RL), navigation, and simulati
 ## Overview
 
 ![Overview](image/overview.gif)
-[stairs.webm](https://github.com/user-attachments/assets/6224a06f-a809-4bf3-9eb1-c95fee043fe2)
+
+---
+![stairs](https://github.com/user-attachments/assets/ac0951fc-6ed5-4c84-96e0-210e1059e04f)
 
 This project follows a Sim-to-Sim approach, executing controllers trained in Isaac Lab within the Gazebo simulator. The virtual Unitree Go2 and Go2W robots are equipped with a  LiDAR. The mounting position of the Velodyne VLP16 LiDAR is based on the [Unitree developer documentation](https://support.unitree.com/home/en/developer/SLAM%20and%20Navigation_service).
 
@@ -151,7 +153,8 @@ Follow these steps to launch the simulation and control the robot. Each command 
     
 5. **Door Control (Optional Feature)**  
     This repository includes a Gazebo **Door Plugin** and a Behavior-Tree-based **Door Controller** to control doors in the simulated building via ROS 2.
-    
+    ![door_plugin](https://github.com/user-attachments/assets/5cbc78d2-b43d-4adc-a019-1a0dc1cd3005)
+
     The environment contains **37 doors** in total, with the following types:
     
     - Single hinged doors  
