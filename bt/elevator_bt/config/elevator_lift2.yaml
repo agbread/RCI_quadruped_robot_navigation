@@ -1,0 +1,5 @@
+elevator:
+  namespace: "/lift2"         # 플러그인 네임스페이스
+  floor_heights_m: [0.0, 5.0, 10.0]   # 0,1,2층 Z(m) — 실제 환경에 맞게 수정
+  cabin_z_tolerance: 0.03     # 층 도달 허용오차
+  settle_time_sec: 0.8        # 도달 후 안정 대기

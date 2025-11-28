@@ -85,7 +85,7 @@
           <pbr>
             <metal>
               <metalness>0.0</metalness>
-              <albedo_map>model://hotel_L1/meshes/white_beige_tiles.png</albedo_map>
+              <albedo_map>model://hotel_L1/meshes/blue_linoleum.png</albedo_map>
             </metal>
           </pbr>
           <script>
@@ -98,6 +98,181 @@
         <geometry>
           <mesh>
             <uri>model://hotel_L1/meshes/floor_3.obj</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0x01</collide_bitmask>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name="floor_4">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_4.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0</diffuse>
+          <specular>0.1 0.1 0.1</specular>
+          <pbr>
+            <metal>
+              <metalness>0.0</metalness>
+              <albedo_map>model://hotel_L1/meshes/blue_linoleum.png</albedo_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>model://hotel_L1/meshes/</uri>
+            <name>floor_4_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_4.obj</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0x01</collide_bitmask>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name="floor_5">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_5.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0</diffuse>
+          <specular>0.1 0.1 0.1</specular>
+          <pbr>
+            <metal>
+              <metalness>0.0</metalness>
+              <albedo_map>model://hotel_L1/meshes/blue_linoleum.png</albedo_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>model://hotel_L1/meshes/</uri>
+            <name>floor_5_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_5.obj</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0x01</collide_bitmask>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name="floor_6">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_6.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0</diffuse>
+          <specular>0.1 0.1 0.1</specular>
+          <pbr>
+            <metal>
+              <metalness>0.0</metalness>
+              <albedo_map>model://hotel_L1/meshes/concrete4.png</albedo_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>model://hotel_L1/meshes/</uri>
+            <name>floor_6_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_6.obj</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0x01</collide_bitmask>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name="floor_7">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_7.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0</diffuse>
+          <specular>0.1 0.1 0.1</specular>
+          <pbr>
+            <metal>
+              <metalness>0.0</metalness>
+              <albedo_map>model://hotel_L1/meshes/concrete4.png</albedo_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>model://hotel_L1/meshes/</uri>
+            <name>floor_7_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_7.obj</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0x01</collide_bitmask>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name="floor_8">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_8.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1.0 1.0 1.0</diffuse>
+          <specular>0.1 0.1 0.1</specular>
+          <pbr>
+            <metal>
+              <metalness>0.0</metalness>
+              <albedo_map>model://hotel_L1/meshes/blue_linoleum.png</albedo_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>model://hotel_L1/meshes/</uri>
+            <name>floor_8_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/floor_8.obj</uri>
           </mesh>
         </geometry>
         <surface>
@@ -142,7 +317,7 @@
           </contact>
         </surface>
       </collision>
-      <pose>2.2522282575069843 -40.52464950099821 0 0 0 0</pose>
+      <pose>2.265116752338462 -40.086533255047804 0 0 0 0</pose>
     </link>
     <link name="wall_2">
       <visual name="wall_2">
@@ -179,7 +354,7 @@
           </contact>
         </surface>
       </collision>
-      <pose>7.025808698579259 -19.658756477546383 0 0 0 0</pose>
+      <pose>6.992437290015334 -40.086533255047804 0 0 0 0</pose>
     </link>
     <link name="wall_3">
       <visual name="wall_3">
@@ -216,7 +391,7 @@
           </contact>
         </surface>
       </collision>
-      <pose>15.230619618099192 -26.215655451325162 0 0 0 0</pose>
+      <pose>15.199372084678874 -26.05711093714324 0 0 0 0</pose>
     </link>
     <link name="wall_4">
       <visual name="wall_4">
@@ -225,7 +400,7 @@
             <uri>model://hotel_L1/meshes/wall_4.obj</uri>
           </mesh>
         </geometry>
-        <transparency>0.0</transparency>
+        <transparency>0.4</transparency>
         <material>
           <diffuse>1.0 1.0 1.0</diffuse>
           <specular>0.1 0.1 0.1</specular>
@@ -253,7 +428,7 @@
           </contact>
         </surface>
       </collision>
-      <pose>26.6446040486479 -40.311773898212664 0 0 0 0</pose>
+      <pose>6.976464887597373 -40.086533255047804 0 0 0 0</pose>
     </link>
     <link name="wall_5">
       <visual name="wall_5">
@@ -262,14 +437,14 @@
             <uri>model://hotel_L1/meshes/wall_5.obj</uri>
           </mesh>
         </geometry>
-        <transparency>0.4</transparency>
+        <transparency>0.0</transparency>
         <material>
           <diffuse>1.0 1.0 1.0</diffuse>
           <specular>0.1 0.1 0.1</specular>
           <pbr>
             <metal>
               <metalness>0.0</metalness>
-              <albedo_map>model://hotel_L1/meshes/blue_linoleum.png</albedo_map>
+              <albedo_map>model://hotel_L1/meshes/black_concrete.png</albedo_map>
             </metal>
           </pbr>
           <script>
@@ -290,7 +465,7 @@
           </contact>
         </surface>
       </collision>
-      <pose>7.053491876501942 -40.46493434083732 0 0 0 0</pose>
+      <pose>16.069085363864705 -20.45643246240664 0 0 0 0</pose>
     </link>
     <link name="wall_6">
       <visual name="wall_6">
@@ -306,7 +481,7 @@
           <pbr>
             <metal>
               <metalness>0.0</metalness>
-              <albedo_map>model://hotel_L1/meshes/black_concrete.png</albedo_map>
+              <albedo_map>model://hotel_L1/meshes/default.png</albedo_map>
             </metal>
           </pbr>
           <script>
@@ -327,7 +502,81 @@
           </contact>
         </surface>
       </collision>
-      <pose>16.13498958341294 -20.504136073535577 0 0 0 0</pose>
+      <pose>21.24366865642432 -26.02938480608019 0 0 0 0</pose>
+    </link>
+    <link name="wall_7">
+      <visual name="wall_7">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/wall_7.obj</uri>
+          </mesh>
+        </geometry>
+        <transparency>0.0</transparency>
+        <material>
+          <diffuse>1.0 1.0 1.0</diffuse>
+          <specular>0.1 0.1 0.1</specular>
+          <pbr>
+            <metal>
+              <metalness>0.0</metalness>
+              <albedo_map>model://hotel_L1/meshes/wall_white.png</albedo_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>model://hotel_L1/meshes/</uri>
+            <name>wall_7_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/wall_7.obj</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0x01</collide_bitmask>
+          </contact>
+        </surface>
+      </collision>
+      <pose>25.4580405780083 -34.98492513944615 0 0 0 0</pose>
+    </link>
+    <link name="wall_8">
+      <visual name="wall_8">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/wall_8.obj</uri>
+          </mesh>
+        </geometry>
+        <transparency>0.0</transparency>
+        <material>
+          <diffuse>1.0 1.0 1.0</diffuse>
+          <specular>0.1 0.1 0.1</specular>
+          <pbr>
+            <metal>
+              <metalness>0.0</metalness>
+              <albedo_map>model://hotel_L1/meshes/concrete4.png</albedo_map>
+            </metal>
+          </pbr>
+          <script>
+            <uri>model://hotel_L1/meshes/</uri>
+            <name>wall_8_Diffuse</name>
+          </script>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://hotel_L1/meshes/wall_8.obj</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <collide_bitmask>0x01</collide_bitmask>
+          </contact>
+        </surface>
+      </collision>
+      <pose>29.14561600939428 -34.98492513944615 0 0 0 0</pose>
     </link>
   </model>
 </sdf>

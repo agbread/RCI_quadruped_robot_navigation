@@ -29,7 +29,7 @@
     </gazebo> -->
 
     <!-- Show the trajectory of foot. You can add another trajectory about another foot. -->
-    <!-- <gazebo>
+    <gazebo>
         <plugin name="3dplot" filename="libLinkPlot3DPlugin.so">
             <frequency>100</frequency>
             <plot>
@@ -38,7 +38,7 @@
                 <material>Gazebo/Green</material>
             </plot>
         </plugin>
-    </gazebo> -->
+    </gazebo>
 
     <gazebo>
         <plugin filename="libgazebo_ros_force.so" name="gazebo_ros_force">
@@ -106,7 +106,7 @@
     </gazebo>
 
     <!-- Visualization of Foot contacts. -->
-    <!-- <gazebo reference="FR_foot">
+    <gazebo reference="FR_foot">
         <visual>
             <plugin name="drawForcePlugin" filename="libunitreeDrawForcePlugin.so">
                 <topicName>FR_foot_contact</topicName>
@@ -133,7 +133,7 @@
                 <topicName>RL_foot_contact</topicName>
             </plugin>
         </visual>
-    </gazebo> -->
+    </gazebo>
 
     </xacro:if>
 

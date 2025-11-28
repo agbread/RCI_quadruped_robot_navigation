@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="Main">
+
+  <BehaviorTree ID="Main">
+
+    <!-- 문 3개를 동시에 관리 -->
+    <Parallel name="AllDoors"
+              success_threshold="1"
+              failure_threshold="3">
+
+      <!-- =======================
+           문 1 : L1 Stair2
+           ======================= -->
+      <Sequence name="L1DoorStair2Logic">
+
+        <!-- 1) 이 문을 경로에서 쓸지 여부 -->
+        <CheckPathUsesDoor
+          name="L1DoorStair2_Path"
+          door_p1_x="26.344428"
+          door_p1_y="-34.934925"
+          door_p2_x="27.721528"
+          door_p2_y="-34.934925"/>
+
+        <!-- 2) 상태머신: 열기 / 닫기 -->
+        <ReactiveFallback name="L1DoorStair2_SM">
+
+          <!-- 2-A) 닫기 조건: 이미 문 뒤 + 반경 밖 -->
+          <Sequence name="L1DoorStair2_CloseSeq">
+            <IsRobotPastDoor
+              name="L1DoorStair2_Past"
+              door_c_x="27.032978"
+              door_c_y="-34.934925"
+              n_x="0.0"
+              n_y="1.0"/>
+            <Inverter>
+              <IsRobotInDoorRadius
+                name="L1DoorStair2_RadiusForClose"
+                door_c_x="27.032978"
+                door_c_y="-34.934925"
+                radius="1.3771"/>
+            </Inverter>
+            <SetDoorOpen
+              name="L1DoorStair2_Close"
+              door_ns="/doors/L1_door_stair2"
+              open="false"/>
+          </Sequence>
+
+          <!-- 2-B) 열기 조건: 아직 문 앞 + 반경 안 -->
+          <Sequence name="L1DoorStair2_OpenSeq">
+            <Inverter>
+              <IsRobotPastDoor
+                name="L1DoorStair2_NotPast"
+                door_c_x="27.032978"
+                door_c_y="-34.934925"
+                n_x="0.0"
+                n_y="1.0"/>
+            </Inverter>
+            <IsRobotInDoorRadius
+              name="L1DoorStair2_RadiusForOpen"
+              door_c_x="27.032978"
+              door_c_y="-34.934925"
+              radius="1.3771"/>
+            <SetDoorOpen
+              name="L1DoorStair2_Open"
+              door_ns="/doors/L1_door_stair2"
+              open="true"/>
+          </Sequence>
+
+        </ReactiveFallback>
+      </Sequence>
+
+      <!-- =======================
+           문 2 : L1 Toilet
+           ======================= -->
+      <Sequence name="L1DoorToiletLogic">
+
+        <CheckPathUsesDoor
+          name="L1DoorToilet_Path"
+          door_p1_x="25.508041"
+          door_p1_y="-37.989403"
+          door_p2_x="25.508041"
+          door_p2_y="-39.366503"/>
+
+        <ReactiveFallback name="L1DoorToilet_SM">
+
+          <Sequence name="L1DoorToilet_CloseSeq">
+            <IsRobotPastDoor
+              name="L1DoorToilet_Past"
+              door_c_x="25.508041"
+              door_c_y="-38.677953"
+              n_x="1.0"
+              n_y="0.0"/>
+            <Inverter>
+              <IsRobotInDoorRadius
+                name="L1DoorToilet_RadiusForClose"
+                door_c_x="25.508041"
+                door_c_y="-38.677953"
+                radius="1.3771"/>
+            </Inverter>
+            <SetDoorOpen
+              name="L1DoorToilet_Close"
+              door_ns="/doors/L1_door_toilet"
+              open="false"/>
+          </Sequence>
+
+          <Sequence name="L1DoorToilet_OpenSeq">
+            <Inverter>
+              <IsRobotPastDoor
+                name="L1DoorToilet_NotPast"
+                door_c_x="25.508041"
+                door_c_y="-38.677953"
+                n_x="1.0"
+                n_y="0.0"/>
+            </Inverter>
+            <IsRobotInDoorRadius
+              name="L1DoorToilet_RadiusForOpen"
+              door_c_x="25.508041"
+              door_c_y="-38.677953"
+              radius="1.3771"/>
+            <SetDoorOpen
+              name="L1DoorToilet_Open"
+              door_ns="/doors/L1_door_toilet"
+              open="true"/>
+          </Sequence>
+
+        </ReactiveFallback>
+      </Sequence>
+
+      <!-- =======================
+           문 3 : L1 Stair1
+           ======================= -->
+      <Sequence name="L1DoorStair1Logic">
+
+        <CheckPathUsesDoor
+          name="L1DoorStair1_Path"
+          door_p1_x="25.508041"
+          door_p1_y="-35.494051"
+          door_p2_x="25.508041"
+          door_p2_y="-36.871151"/>
+
+        <ReactiveFallback name="L1DoorStair1_SM">
+
+          <Sequence name="L1DoorStair1_CloseSeq">
+            <IsRobotPastDoor
+              name="L1DoorStair1_Past"
+              door_c_x="25.508041"
+              door_c_y="-36.182601"
+              n_x="1.0"
+              n_y="0.0"/>
+            <Inverter>
+              <IsRobotInDoorRadius
+                name="L1DoorStair1_RadiusForClose"
+                door_c_x="25.508041"
+                door_c_y="-36.182601"
+                radius="1.3771"/>
+            </Inverter>
+            <SetDoorOpen
+              name="L1DoorStair1_Close"
+              door_ns="/doors/L1_door_stair1"
+              open="false"/>
+          </Sequence>
+
+          <Sequence name="L1DoorStair1_OpenSeq">
+            <Inverter>
+              <IsRobotPastDoor
+                name="L1DoorStair1_NotPast"
+                door_c_x="25.508041"
+                door_c_y="-36.182601"
+                n_x="1.0"
+                n_y="0.0"/>
+            </Inverter>
+            <IsRobotInDoorRadius
+              name="L1DoorStair1_RadiusForOpen"
+              door_c_x="25.508041"
+              door_c_y="-36.182601"
+              radius="1.3771"/>
+            <SetDoorOpen
+              name="L1DoorStair1_Open"
+              door_ns="/doors/L1_door_stair1"
+              open="true"/>
+          </Sequence>
+
+        </ReactiveFallback>
+      </Sequence>
+
+    </Parallel>
+
+  </BehaviorTree>
+</root>

@@ -26,7 +26,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: PointCloud2
+    SyncSource: ""
 Visualization Manager:
   Class: ""
   Displays:
@@ -85,6 +85,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        FL_foot_motor:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         FL_hip:
           Alpha: 1
           Show Axes: false
@@ -111,6 +116,11 @@ Visualization Manager:
           Show Trail: false
           Value: true
         FR_foot:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        FR_foot_motor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -156,6 +166,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        RL_foot_motor:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         RL_hip:
           Alpha: 1
           Show Axes: false
@@ -186,6 +201,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        RR_foot_motor:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         RR_hip:
           Alpha: 1
           Show Axes: false
@@ -196,7 +216,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        base:
+        base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -205,16 +225,30 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        livox_frame:
+        livox_imu_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        radar:
+        radar_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
         trunk:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vlp16:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vlp16_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        vlp16_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -264,7 +298,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
