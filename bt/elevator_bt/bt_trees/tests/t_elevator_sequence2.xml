@@ -1,0 +1,73 @@
+<root main_tree_to_execute="Main">
+  <BehaviorTree ID="Main">
+    <Sequence>
+
+      <!-- (A) 출발 전: 문이 열려 있으면 닫고, 닫힘 확인. 닫혀 있으면 통과 -->
+      <Fallback name="EnsureDoorClosedBeforeDepart">
+        <Sequence name="IfOpenThenClose">
+          <!-- 문이 '열림' 상태인지 빠르게 점검 (열려 있으면 SUCCESS) -->
+          <WaitDoorOpen
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              want_open="true"
+              open_threshold="0.7"   
+              timeout="5.0"/>
+          <!-- 열려 있으면 닫기 -->
+          <SetElevatorDoor
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              open="false"/>
+          <!-- 닫힘이 안정적으로 유지될 때까지 대기 -->
+          <WaitDoorOpen
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              want_open="false"
+              open_threshold="0.02"  
+              timeout="5.0"/>
+        </Sequence>
+        <!-- 애초에 문이 닫혀 있었다면 여기로 와서 바로 통과 -->
+        <AlwaysSuccess/>
+      </Fallback>
+
+      <!-- (B) 목표층으로 엘리베이터 호출 -->
+      <CallElevatorToFloor
+          elevator_yaml="{elev_yaml}"
+          elevator_ns="{elevator_ns}"
+          floor_idx="{target_floor}"
+          timeout="30.0"/>
+
+      <!-- (C) 엘리베이터가 목표층에 안정적으로 도착할 때까지 대기 -->
+      <WaitCabinAtTarget
+          elevator_yaml="{elev_yaml}"
+          elevator_ns="{elevator_ns}"
+          floor_idx="{target_floor}"
+          timeout="20.0"/>
+
+      <!-- (D) 도착 후: 이미 열려 있으면 통과, 닫혀 있으면 열고 열림 확인 -->
+      <Fallback name="EnsureDoorOpenAfterArrive">
+        <!-- 빠른 확인: 이미 열려 있으면 SUCCESS -->
+        <!-- <WaitDoorOpen
+            elevator_yaml="{elev_yaml}"
+            elevator_ns="{elevator_ns}"
+            want_open="true"
+            open_threshold="0.7"     
+            timeout="2.0"/> -->
+        <!-- 닫혀 있으면: 열기 명령 → 열림 안정 확인 -->
+        <Sequence name="OpenThenWait">
+          <SetElevatorDoor
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              open="true"/>
+          <WaitDoorOpen
+              elevator_yaml="{elev_yaml}"
+              elevator_ns="{elevator_ns}"
+              want_open="true"
+              open_threshold="0.7"   
+              timeout="5.0"/>
+        </Sequence>
+      </Fallback>
+
+      <Ok/>
+    </Sequence>
+  </BehaviorTree>
+</root>

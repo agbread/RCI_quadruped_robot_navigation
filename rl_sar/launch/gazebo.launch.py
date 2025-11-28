@@ -13,8 +13,9 @@ from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
-    rname = LaunchConfiguration("rname")
-    wname = "hotel_raw_new_elevator"
+    # rname = LaunchConfiguration("rname")
+    rname = "b2"
+    wname = "hotel_stairs"
     robot_name = ParameterValue(Command(["echo -n ", rname]), value_type=str)
     ros_namespace = ParameterValue(Command(["echo -n ", "/", rname, "_gazebo"]), value_type=str)
     gazebo_model_name = ParameterValue(Command(["echo -n ", rname, "_gazebo"]), value_type=str)
@@ -46,7 +47,6 @@ def generate_launch_description():
             "world": os.path.join(get_package_share_directory("rl_sar"), "worlds", wname + ".world"),
         }.items(),
     )
-
     spawn_entity = Node(
         package="gazebo_ros",
         executable="spawn_entity.py",
@@ -55,7 +55,7 @@ def generate_launch_description():
             "-entity", "robot_model",
             "-x", "20.0",
             "-y", "-35.0",
-            "-z", "8.0",
+            "-z", "0.0",
             "-Y", "0.0",
         ],
         output="screen",

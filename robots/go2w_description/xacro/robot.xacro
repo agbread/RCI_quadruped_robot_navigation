@@ -12,7 +12,7 @@
 
     <!-- Mount for VLP-16 LiDAR -->
     <joint name="vlp16_mount_joint" type="fixed">
-        <origin xyz="0.16143 0 0.12262" rpy="0 0.22689 0"/>
+        <origin xyz="0.14543 0 0.13928" rpy="0 0 0"/>
         <parent link="base_link"/> 
         <child link="vlp16_link"/>
     </joint>

@@ -6,6 +6,9 @@ This repository integrates reinforcement learning (RL), navigation, and simulati
 
 ![Overview](image/overview.gif)
 
+---
+![stairs](https://github.com/user-attachments/assets/ac0951fc-6ed5-4c84-96e0-210e1059e04f)
+
 This project follows a Sim-to-Sim approach, executing controllers trained in Isaac Lab within the Gazebo simulator. The virtual Unitree Go2 and Go2W robots are equipped with a  LiDAR. The mounting position of the Velodyne VLP16 LiDAR is based on the [Unitree developer documentation](https://support.unitree.com/home/en/developer/SLAM%20and%20Navigation_service).
 
 ## Prerequisites
@@ -147,8 +150,91 @@ Follow these steps to launch the simulation and control the robot. Each command 
     ros2 topic echo /lift1/cabin_z
     ros2 topic echo /lift1/door_pos
     ```
+    
+5. **Door Control (Optional Feature)**  
+    This repository includes a Gazebo **Door Plugin** and a Behavior-Tree-based **Door Controller** to control doors in the simulated building via ROS 2.
+    ![door_plugin](https://github.com/user-attachments/assets/5cbc78d2-b43d-4adc-a019-1a0dc1cd3005)
 
+    The environment contains **37 doors** in total, with the following types:
+    
+    - Single hinged doors  
+    - Single sliding doors  
+    - Double hinged doors  
+    - Double sliding doors  
+    
+    All doors share the **same topic interface**; only the **namespace** changes (e.g., `/L1_door1`, `/L1_door2`, `/L2_door5`, ...).
+    
+    ---
+    
+    ### 5.1 Door Plugin Usage
+    
+    Each door is controlled by a dedicated namespace.  
+    Below is an example for the door with namespace `/L1_door1`:
+    
+    #### Topics
+    
+    **Commands**
+    - `/L1_door1/door_open` (`std_msgs/Bool`):  
+      - `true`  → open the door  
+      - `false` → close the door  
+    
+    **Status**
+    - `/L1_door1/door_pos`: current door joint position(s)  
+      - For double doors, this typically represents both leaves (e.g., `[right, left]`).
+    
+    #### Example Commands
+    ```bash
+    # Open / close a door (L1_door1)
+    ros2 topic pub /L1_door1/door_open std_msgs/msg/Bool "{data: true}"
+    ros2 topic pub /L1_door1/door_open std_msgs/msg/Bool "{data: false}"
+    
+    # Monitor door joint position(s)
+    ros2 topic echo /L1_door1/door_pos
+    ```
+    To control **any other door**, simply replace L1_door1 with the corresponding door namespace
+    (e.g., `/L1_door2`, `/L1_door_stairs1`, `/L1_door_toilet`, `/L2_door3`, etc.).
 
+    ---
+    ### 5.2 Behavior Tree-Based Automatic Door Control
+    
+    In addition to manual topic-based control, this repository provides a **Behavior Tree (BT)** node that automatically opens and closes doors along the robot’s planned path.
+   ![door_BT](https://github.com/user-attachments/assets/570c1983-133c-4085-b874-e2b8cc2db93b)
+
+    --- 
+    #### Supported Doors (Current Setup)
+    
+    The BT-based door controller is currently configured for the following 1st-floor doors:
+    
+    - `/L1_door_stairs1`
+    - `/L1_door_stairs2`
+    - `/L1_door_toilet`
+    
+    All these doors use the same topic interface as in **5.1** (only the namespace changes).
+    
+    --- 
+    #### Node Execution
+    Run the BT door controller with:
+    ```bash
+    ros2 run door_bt door_bt_runner
+    ```
+    Make sure the simulation and navigation stack are running, and that the door plugins for the above namespaces are loaded in the world.
+
+   ---
+    ### Path Topic
+    The BT node subscribes to the planned path topic:    
+    - `/planned_path`
+      
+    This topic should contain the robot’s planned path (e.g., from a global planner) so that the BT can determine whether the path passes through any controlled doors.
+
+    ---
+    ### Behavior
+    When the planned path passes through one of the configured doors:
+    
+    The BT **automatically opens** the door (via <door_namespace>/door_open) before the robot reaches it. 
+    After the robot has passed the door, the BT **automatically closes** it.
+
+   This allows the robot to traverse routes that include doors without any manual `ros2 topic pub` commands.
+   
 ## Example: Teleoperation Control
 
 This example demonstrates how to control the robot's movement using keyboard commands.
@@ -174,6 +260,26 @@ This example demonstrates how to control the robot's movement using keyboard com
     (csuite) quit
     ```
 
+## Temporary use(Navigation)
+1. Mapping
+    ```bash
+    ros2 launch rm_nav_bringup bringup_sim_velodyne.launch.py \
+    world:=hotel_raw \
+    mode:=mapping \
+    lio:=fastlio \
+    lio_rviz:=False \
+    nav_rviz:=True
+    ```
+2. Navigation
+   ```bash
+    ros2 launch rm_nav_bringup bringup_sim_velodyne.launch.py \
+    world:=L1 \
+    mode:=nav \
+    lio:=fastlio \
+    localization:=slam_toolbox \
+    lio_rviz:=False \
+    nav_rviz:=True
+   ```
 
 ## TodoList 
 

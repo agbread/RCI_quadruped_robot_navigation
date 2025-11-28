@@ -5,6 +5,6 @@ Kd 1.0 1.0 1.0
 Ke 0.0 0.0 0.0
 Ns 50.0
 Ni 1.0
-d 0.6
+d 1
 illum 2
-map_Kd blue_linoleum.png
+map_Kd black_concrete.png
