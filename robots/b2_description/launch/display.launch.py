@@ -18,18 +18,20 @@ def generate_launch_description():
     robot_description = robot_description_config.toxml()
    
 
-    # rviz_config_file = os.path.join(pkg_path, 'rviz', 'display.rviz')
-    # node_rviz = Node(
-    #     package='rviz2',
-    #     executable='rviz2',
-    #     name='rviz2',
-    #     arguments=['-d', rviz_config_file],
-    #     output='screen'
-    # )
+    rviz_config_file = os.path.join(pkg_path, 'rviz', 'display.rviz')
+    node_rviz = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        arguments=['-d', rviz_config_file],
+        output='screen'
+    )
     # Launch!
     return LaunchDescription([
         DeclareLaunchArgument(
             'use_sim_time',
-            default_value='false',
-            description='Use sim time if true')
+            default_value='true',
+            description='Use sim time if true'),
+
+        node_rviz
     ])

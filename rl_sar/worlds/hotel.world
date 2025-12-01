@@ -1033,7 +1033,7 @@
     </model>
     <include>
       <name>hotel_L1</name>
-      <uri>model://hotel_L1</uri>
+      <uri>model://hotel_L1_before</uri>
       <pose>0 0 0.0 0 0 0</pose>
     </include>
     <include>
@@ -2173,7 +2173,7 @@
     </model>
     <include>
       <name>hotel_L2</name>
-      <uri>model://hotel_L2</uri>
+      <uri>model://hotel_L2_before</uri>
       <pose>0 0 8.0 0 0 0</pose>
     </include>
     <include>
@@ -3289,7 +3289,7 @@
     </model>
     <include>
       <name>hotel_L3</name>
-      <uri>model://hotel_L3</uri>
+      <uri>model://hotel_L3_before</uri>
       <pose>0 0 16.0 0 0 0</pose>
     </include>
     <model name="Lift1">
