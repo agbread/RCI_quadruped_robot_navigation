@@ -44,9 +44,6 @@ endif()
 install(TARGETS elevator_bt_runner
   DESTINATION lib/${PROJECT_NAME})
 
-install(DIRECTORY bt_trees launch
-  DESTINATION share/${PROJECT_NAME})
-
 install(DIRECTORY include/
   DESTINATION include)
 
