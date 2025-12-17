@@ -289,9 +289,8 @@ Follow these steps to launch the simulation and control the robot. Each command 
   ```
   - Sends the target floor as a trigger.
   - Example above requests **floor 1**.
-  ```
     
-   
+
 ## Example: Teleoperation Control
 
 This example demonstrates how to control the robot's movement using keyboard commands.
