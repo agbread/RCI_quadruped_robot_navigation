@@ -1,6 +1,6 @@
 # Quadruped Robot Navigation in Gazebo
 
-This repository integrates reinforcement learning (RL), navigation, and simulation to enable autonomous navigation for the Unitree Go2 and Go2W quadruped robots in Gazebo.
+This repository integrates reinforcement learning (RL), navigation, and simulation to enable autonomous navigation for the Unitree Go2, Go2W and B2 quadruped robots in Gazebo.
 
 ## Overview
 
