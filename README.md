@@ -1,13 +1,13 @@
 # Quadruped Robot Navigation in Gazebo
 
-This repository integrates reinforcement learning (RL), navigation, and simulation to enable autonomous navigation for the Unitree Go2 and Go2W quadruped robots in Gazebo.
+This repository integrates reinforcement learning (RL), navigation, and simulation to enable autonomous navigation for the Unitree Go2, Go2W and B2 quadruped robots in Gazebo.
 
 ## Overview
 
-![Overview](image/overview.gif)
-
----
-![stairs](https://github.com/user-attachments/assets/ac0951fc-6ed5-4c84-96e0-210e1059e04f)
+<p align="center">
+  <img src="image/overview.gif" alt="Overview" width="49%" />
+  <img src="https://github.com/user-attachments/assets/ac0951fc-6ed5-4c84-96e0-210e1059e04f" alt="Stairs" width="49%" />
+</p>
 
 This project follows a Sim-to-Sim approach, executing controllers trained in Isaac Lab within the Gazebo simulator. The virtual Unitree Go2 and Go2W robots are equipped with a  LiDAR. The mounting position of the Velodyne VLP16 LiDAR is based on the [Unitree developer documentation](https://support.unitree.com/home/en/developer/SLAM%20and%20Navigation_service).
 
@@ -90,6 +90,9 @@ Follow these steps to launch the simulation and control the robot. Each command 
 
     # Launch with the Go2W robot
     ros2 launch rl_sar gazebo.launch.py rname:="go2w"
+
+    # Launch with the Go2W robot
+    ros2 launch rl_sar gazebo.launch.py rname:="b2"
     ```
 
 2.  **Run the RL Controller:**
@@ -164,9 +167,10 @@ Follow these steps to launch the simulation and control the robot. Each command 
     
     All doors share the **same topic interface**; only the **namespace** changes (e.g., `/L1_door1`, `/L1_door2`, `/L2_door5`, ...).
     
-    ---
-    
-    ### 5.1 Door Plugin Usage
+    <details>
+    <summary>Click to expand</summary>
+        
+    #### 5.1 Door Plugin Usage
     
     Each door is controlled by a dedicated namespace.  
     Below is an example for the door with namespace `/L1_door1`:
@@ -234,7 +238,56 @@ Follow these steps to launch the simulation and control the robot. Each command 
     After the robot has passed the door, the BT **automatically closes** it.
 
    This allows the robot to traverse routes that include doors without any manual `ros2 topic pub` commands.
-   
+
+6. **Stair locomotion (Optional Feature)**
+
+   #### 6.1 How it works (high-level behavior)
+    
+   Once the Stair Behavior Tree (BT) is running, the robot follows this flow:
+    
+   1. **Wait for a target floor request**
+      The BT keeps waiting for a message on `/stairs/floor_request`.
+
+   2. **Read the current floor**
+      When a target floor is received, the BT estimates the robot’s current floor (e.g., from robot pose / height in the world frame).
+    
+   3. **Decide what to do (up / down / stay)**  
+      - `target_floor > current_floor` → **go up**
+      - `target_floor < current_floor` → **go down**
+      - `target_floor == current_floor` → **no movement (already on target floor)**
+    
+   4. **Navigate to the stair entry**  
+      The BT selects the appropriate stair entry pose for the current step and navigates there using Nav2.
+    
+   5. **Align and execute stair locomotion**  
+      The robot aligns itself with the stairs, performs stair locomotion (mid/top), and runs the landing motions (move/turn) as configured.
+    
+   6. **Multi-floor moves (repeat per floor)**  
+      If the target floor is more than one level away, the BT repeats the “one-floor stair step” sequence until it reaches the target floor.
+   ---
+   #### 6.2 Node execution & command description 
+   #### (1) Start Nav2 bringup
+   ```bash
+   ros2 launch quadruped_nav2 quadruped_nav2_bringup.launch.py
+   ```
+   - Launches Nav2-related nodes for path planning and navigation.
+   - Used to move the robot to the stair entry pose before starting stair locomotion.
+    
+   #### (2) Run the Stair BT
+   ```bash
+   ros2 run stair_bt stair_bt_runner --ros-args -p bt_xml_file:="$(ros2 pkg prefix stair_bt)/share/stair_bt/bt_trees/stairs.xml"
+   ```
+   - Runs the stair locomotion Behavior Tree.
+   - The BT waits for `/stairs/floor_request` and, once received, executes the stair locomotion sequence.
+    
+   #### (3) Publish a target floor request
+   ```bash
+   ros2 topic pub /stairs/floor_request std_msgs/msg/Int32 "{data: 1}"
+   ```
+   - Sends the target floor as a trigger.
+   - Example above requests **floor 1**.
+    
+
 ## Example: Teleoperation Control
 
 This example demonstrates how to control the robot's movement using keyboard commands.
@@ -259,27 +312,6 @@ This example demonstrates how to control the robot's movement using keyboard com
     (csuite) activation false
     (csuite) quit
     ```
-
-## Temporary use(Navigation)
-1. Mapping
-    ```bash
-    ros2 launch rm_nav_bringup bringup_sim_velodyne.launch.py \
-    world:=hotel_raw \
-    mode:=mapping \
-    lio:=fastlio \
-    lio_rviz:=False \
-    nav_rviz:=True
-    ```
-2. Navigation
-   ```bash
-    ros2 launch rm_nav_bringup bringup_sim_velodyne.launch.py \
-    world:=L1 \
-    mode:=nav \
-    lio:=fastlio \
-    localization:=slam_toolbox \
-    lio_rviz:=False \
-    nav_rviz:=True
-   ```
 
 ## TodoList 
 
