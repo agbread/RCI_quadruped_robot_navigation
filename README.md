@@ -264,29 +264,28 @@ Follow these steps to launch the simulation and control the robot. Each command 
     
    6. **Multi-floor moves (repeat per floor)**  
       If the target floor is more than one level away, the BT repeats the “one-floor stair step” sequence until it reaches the target floor.
+   ---
+   #### 6.2 Node execution & command description 
+   #### (1) Start Nav2 bringup
+   ```bash
+   ros2 launch quadruped_nav2 quadruped_nav2_bringup.launch.py
+   ```
+   - Launches Nav2-related nodes for path planning and navigation.
+   - Used to move the robot to the stair entry pose before starting stair locomotion.
     
-  #### 6.2 Node execution & command description
+   #### (2) Run the Stair BT
+   ```bash
+   ros2 run stair_bt stair_bt_runner --ros-args -p bt_xml_file:="$(ros2 pkg prefix stair_bt)/share/stair_bt/bt_trees/stairs.xml"
+   ```
+   - Runs the stair locomotion Behavior Tree.
+   - The BT waits for `/stairs/floor_request` and, once received, executes the stair locomotion sequence.
     
-  #### (1) Start Nav2 bringup
-  ```bash
-  ros2 launch quadruped_nav2 quadruped_nav2_bringup.launch.py
-  ```
-  - Launches Nav2-related nodes for path planning and navigation.
-  - Used to move the robot to the stair entry pose before starting stair locomotion.
-    
-  #### (2) Run the Stair BT
-  ```bash
-  ros2 run stair_bt stair_bt_runner --ros-args -p bt_xml_file:="$(ros2 pkg prefix stair_bt)/share/stair_bt/bt_trees/stairs.xml"
-  ```
-  - Runs the stair locomotion Behavior Tree.
-  - The BT waits for `/stairs/floor_request` and, once received, executes the stair locomotion sequence.
-    
-  #### (3) Publish a target floor request
-  ```bash
-  ros2 topic pub /stairs/floor_request std_msgs/msg/Int32 "{data: 1}"
-  ```
-  - Sends the target floor as a trigger.
-  - Example above requests **floor 1**.
+   #### (3) Publish a target floor request
+   ```bash
+   ros2 topic pub /stairs/floor_request std_msgs/msg/Int32 "{data: 1}"
+   ```
+   - Sends the target floor as a trigger.
+   - Example above requests **floor 1**.
     
 
 ## Example: Teleoperation Control
