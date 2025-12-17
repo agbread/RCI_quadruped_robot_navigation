@@ -260,27 +260,6 @@ This example demonstrates how to control the robot's movement using keyboard com
     (csuite) quit
     ```
 
-## Temporary use(Navigation)
-1. Mapping
-    ```bash
-    ros2 launch rm_nav_bringup bringup_sim_velodyne.launch.py \
-    world:=hotel_raw \
-    mode:=mapping \
-    lio:=fastlio \
-    lio_rviz:=False \
-    nav_rviz:=True
-    ```
-2. Navigation
-   ```bash
-    ros2 launch rm_nav_bringup bringup_sim_velodyne.launch.py \
-    world:=L1 \
-    mode:=nav \
-    lio:=fastlio \
-    localization:=slam_toolbox \
-    lio_rviz:=False \
-    nav_rviz:=True
-   ```
-
 ## TodoList 
 
 1. **Navigation integration**  
