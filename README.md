@@ -240,56 +240,56 @@ Follow these steps to launch the simulation and control the robot. Each command 
    This allows the robot to traverse routes that include doors without any manual `ros2 topic pub` commands.
 
 6. **Stair locomotion (Optional Feature)**
+
+   #### 6.1 How it works (high-level behavior)
     
-    #### 6.1 How it works (high-level behavior)
+   Once the Stair Behavior Tree (BT) is running, the robot follows this flow:
     
-    Once the Stair Behavior Tree (BT) is running, the robot follows this flow:
+   1. **Wait for a target floor request**
+      The BT keeps waiting for a message on `/stairs/floor_request`.
+
+   2. **Read the current floor**
+      When a target floor is received, the BT estimates the robot’s current floor (e.g., from robot pose / height in the world frame).
     
-    1. **Wait for a target floor request**  
-       The BT keeps waiting for a message on `/stairs/floor_request`.
+   3. **Decide what to do (up / down / stay)**  
+      - `target_floor > current_floor` → **go up**
+      - `target_floor < current_floor` → **go down**
+      - `target_floor == current_floor` → **no movement (already on target floor)**
     
-    2. **Read the current floor**  
-       When a target floor is received, the BT estimates the robot’s current floor (e.g., from robot pose / height in the world frame).
+   4. **Navigate to the stair entry**  
+      The BT selects the appropriate stair entry pose for the current step and navigates there using Nav2.
     
-    3. **Decide what to do (up / down / stay)**  
-       - `target_floor > current_floor` → **go up**
-       - `target_floor < current_floor` → **go down**
-       - `target_floor == current_floor` → **no movement (already on target floor)**
+   5. **Align and execute stair locomotion**  
+      The robot aligns itself with the stairs, performs stair locomotion (mid/top), and runs the landing motions (move/turn) as configured.
     
-    4. **Navigate to the stair entry**  
-       The BT selects the appropriate stair entry pose for the current step and navigates there using Nav2.
+   6. **Multi-floor moves (repeat per floor)**  
+      If the target floor is more than one level away, the BT repeats the “one-floor stair step” sequence until it reaches the target floor.
     
-    5. **Align and execute stair locomotion**  
-       The robot aligns itself with the stairs, performs stair locomotion (mid/top), and runs the landing motions (move/turn) as configured.
+  ---
     
-    6. **Multi-floor moves (repeat per floor)**  
-       If the target floor is more than one level away, the BT repeats the “one-floor stair step” sequence until it reaches the target floor.
+  #### 6.2 Node execution & command description
     
-    ---
+  #### (1) Start Nav2 bringup
+  ```bash
+  ros2 launch quadruped_nav2 quadruped_nav2_bringup.launch.py
+  ```
+  - Launches Nav2-related nodes for path planning and navigation.
+  - Used to move the robot to the stair entry pose before starting stair locomotion.
     
-    #### 6.2 Node execution & command description
+  #### (2) Run the Stair BT
+  ```bash
+  ros2 run stair_bt stair_bt_runner --ros-args -p bt_xml_file:="$(ros2 pkg prefix stair_bt)/share/stair_bt/bt_trees/stairs.xml"
+  ```
+  - Runs the stair locomotion Behavior Tree.
+  - The BT waits for `/stairs/floor_request` and, once received, executes the stair locomotion sequence.
     
-    #### (1) Start Nav2 bringup
-    ```bash
-    ros2 launch quadruped_nav2 quadruped_nav2_bringup.launch.py
-    ```
-    - Launches Nav2-related nodes for path planning and navigation.
-    - Used to move the robot to the stair entry pose before starting stair locomotion.
-    
-    #### (2) Run the Stair BT
-    ```bash
-    ros2 run stair_bt stair_bt_runner --ros-args -p bt_xml_file:="$(ros2 pkg prefix stair_bt)/share/stair_bt/bt_trees/stairs.xml"
-    ```
-    - Runs the stair locomotion Behavior Tree.
-    - The BT waits for `/stairs/floor_request` and, once received, executes the stair locomotion sequence.
-    
-    #### (3) Publish a target floor request
-    ```bash
-    ros2 topic pub /stairs/floor_request std_msgs/msg/Int32 "{data: 1}"
-    ```
-    - Sends the target floor as a trigger.
-    - Example above requests **floor 1**.
-       ```
+  #### (3) Publish a target floor request
+  ```bash
+  ros2 topic pub /stairs/floor_request std_msgs/msg/Int32 "{data: 1}"
+  ```
+  - Sends the target floor as a trigger.
+  - Example above requests **floor 1**.
+  ```
     
    
 ## Example: Teleoperation Control
