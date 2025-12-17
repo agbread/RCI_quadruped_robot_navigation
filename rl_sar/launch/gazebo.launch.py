@@ -13,8 +13,7 @@ from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
-    # rname = LaunchConfiguration("rname")
-    rname = "b2"
+    rname = LaunchConfiguration("rname")
     wname = "hotel_stairs_walking_person"
     robot_name = ParameterValue(Command(["echo -n ", rname]), value_type=str)
     ros_namespace = ParameterValue(Command(["echo -n ", "/", rname, "_gazebo"]), value_type=str)
