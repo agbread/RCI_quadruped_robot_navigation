@@ -68,6 +68,11 @@
         <floor name="stair2" model_name="hotel_stair2" />
       </plugin>
     </gui>
+    <include>
+      <uri>model://person_walking</uri>
+      <name>person_L2</name>
+      <pose>20.0 -32.5 5.0 0 0 1.047200</pose>
+    </include>
     <model name="L1_door1">
       <pose>10.709634015069973 -33.66240662817629 0.0 0 0 2.1908053757712316</pose>
       <link name="right">
