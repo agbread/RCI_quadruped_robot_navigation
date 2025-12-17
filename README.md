@@ -265,8 +265,6 @@ Follow these steps to launch the simulation and control the robot. Each command 
    6. **Multi-floor moves (repeat per floor)**  
       If the target floor is more than one level away, the BT repeats the “one-floor stair step” sequence until it reaches the target floor.
     
-  ---
-    
   #### 6.2 Node execution & command description
     
   #### (1) Start Nav2 bringup
