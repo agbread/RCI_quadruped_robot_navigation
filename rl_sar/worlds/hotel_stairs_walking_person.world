@@ -2315,6 +2315,11 @@
           </waypoint>
         </trajectory>
       </script>
+      <plugin name="person_L3_pose_pub" filename="libgazebo_ros_actor_pose_pub.so">
+        <topic>/person_L3/pose</topic>
+        <frame_id>map</frame_id>
+        <update_rate>20</update_rate>
+      </plugin>
     </actor>
     <include>
       <uri>file:///home/home/ros2_ws/src/RCI_quadruped_robot_navigation/rl_sar/models/restricted_zone</uri>

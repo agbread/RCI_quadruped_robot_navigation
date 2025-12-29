@@ -26,7 +26,7 @@ ClimbFlightRL::ClimbFlightRL(const std::string & name,
   node_->declare_parameter<double>("delta_z_top", 5.0);
   node_->declare_parameter<double>("z_tolerance", 0.02);
 
-  world_frame_   = "world";
+  world_frame_   = "map";
   base_frame_    = "base_link";
   timeout_sec_   = 0.0;
   linear_speed_  = 0.5;

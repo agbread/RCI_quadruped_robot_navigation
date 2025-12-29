@@ -11,7 +11,7 @@
           target_floor="{target_floor}"/>
 
       <GetCurrentFloor
-          map_frame="world"
+          map_frame="map"
           base_frame="base_link"
           floor0_z="0.0"
           floor1_z="5.0"
@@ -43,7 +43,7 @@
             <Sequence name="OneFloorStep">
 
               <GetCurrentFloor
-                  map_frame="world"
+                  map_frame="map"
                   base_frame="base_link"
                   floor0_z="0.0"
                   floor1_z="5.0"
@@ -60,7 +60,7 @@
                   target_floor="{next_floor}"
                   direction="{direction}"
                   stair_yaml="/home/home/ros2_ws/install/stair_bt/share/stair_bt/config/stairs.yaml"
-                  map_frame="world"
+                  map_frame="map"
                   stair_id="{stair_id}"
                   entry_pose="{stair_entry_pose}"
                   entry_yaw="{entry_yaw}"
@@ -82,7 +82,7 @@
                   yaw_tolerance="0.02"
                   angular_speed="0.5"
                   timeout="10.0"
-                  world_frame="world"
+                  world_frame="map"
                   base_frame="base_link"/>
 
               <ClimbFlightRL
@@ -92,13 +92,13 @@
                   linear_speed="{flight_speed}"
                   dz_from_entry="{dz_mid}"
                   reference_z="{stair_ref_z}"
-                  world_frame="world"
+                  world_frame="map"
                   base_frame="base_link"/>
 
               <MoveForwardDistance
                   distance="0.6"
                   linear_speed="{landing_speed}"
-                  odom_frame="world"
+                  odom_frame="odom"
                   base_frame="base_link"/>
 
               <TurnRelative
@@ -106,13 +106,13 @@
                   angular_speed="0.5"
                   yaw_tolerance="0.02"
                   timeout="30.0"
-                  ref_frame="world"
+                  ref_frame="map"
                   base_frame="base_link"/>
 
               <MoveForwardDistance
                   distance="{landing_move_d}"
                   linear_speed="{landing_speed}"
-                  odom_frame="world"
+                  odom_frame="odom"
                   base_frame="base_link"/>
 
               <TurnRelative
@@ -120,7 +120,7 @@
                   angular_speed="0.5"
                   yaw_tolerance="0.02"
                   timeout="30.0"
-                  ref_frame="world"
+                  ref_frame="map"
                   base_frame="base_link"/>
 
               <ClimbFlightRL
@@ -130,29 +130,29 @@
                   linear_speed="{flight_speed}"
                   dz_from_entry="{dz_top}"
                   reference_z="{stair_ref_z}"
-                  world_frame="world"
+                  world_frame="map"
                   base_frame="base_link"/>
 
 
               <MoveForwardDistance
                   distance="0.6"
                   linear_speed="{landing_speed}"
-                  odom_frame="world"
+                  odom_frame="odom"
                   base_frame="base_link"/>
 
-              <TurnRelative
+              <!-- <TurnRelative
                   angle_deg="{landing_turn1_deg}"
                   angular_speed="0.5"
                   yaw_tolerance="0.02"
                   timeout="30.0"
-                  ref_frame="world"
-                  base_frame="base_link"/>
-
+                  ref_frame="map"
+                  base_frame="base_link"/> -->
+                  
             </Sequence>
           </Repeat>
 
           <GetCurrentFloor
-              map_frame="world"
+              map_frame="map"
               base_frame="base_link"
               floor0_z="0.0"
               floor1_z="5.0"

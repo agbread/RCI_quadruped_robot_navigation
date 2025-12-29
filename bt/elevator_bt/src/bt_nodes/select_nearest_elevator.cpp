@@ -54,7 +54,7 @@ SelectNearestElevator::SelectNearestElevator(
 BT::PortsList SelectNearestElevator::providedPorts()
 {
   return {
-    BT::InputPort<std::string>("world_frame", "world"),
+    BT::InputPort<std::string>("world_frame", "map"),
     BT::InputPort<std::string>("base_frame", "base_link"),
     BT::InputPort<int>("start_floor"),
     BT::InputPort<std::string>("lift1_yaml"),
@@ -218,7 +218,7 @@ BT::NodeStatus SelectNearestElevator::tick()
   }
 
   // --- 입력 읽기 ---
-  std::string world_frame = "world";
+  std::string world_frame = "map";
   std::string base_frame  = "base_link";
   getInput("world_frame", world_frame);
   getInput("base_frame",  base_frame);
