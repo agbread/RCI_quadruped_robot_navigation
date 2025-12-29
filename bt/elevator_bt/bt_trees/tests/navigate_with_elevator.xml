@@ -3,7 +3,7 @@
   <BehaviorTree ID="Main">
     <Sequence name="ChangeFloorSequence">
       <GetCurrentFloor
-          world_frame="world"
+          world_frame="map"
           base_frame="base_link"
           start_floor="{start_floor}"/>
 
@@ -12,7 +12,7 @@
           target_floor="{target_floor}"/>
 
       <SelectNearestElevator
-          world_frame="world"
+          world_frame="map"
           base_frame="base_link"
           lift1_yaml="/home/home/ros2_ws/src/RCI_quadruped_robot_navigation/bt/elevator_bt/config/elevator_lift1.yaml"
           lift2_yaml="/home/home/ros2_ws/src/RCI_quadruped_robot_navigation/bt/elevator_bt/config/elevator_lift2.yaml"
@@ -28,7 +28,7 @@
       <!-- ElevatorSequence -->
       <WaitRobotNearElevator
           elevator_yaml="{elev_yaml}"
-          world_frame="world"
+          world_frame="map"
           base_frame="base_link"
           timeout="120.0"/>
 
@@ -76,7 +76,7 @@
 
       <WaitRobotInsideCabin
           elevator_yaml="{elev_yaml}"
-          world_frame="world"
+          world_frame="map"
           base_frame="base_link"
           timeout="60.0"/>
 
@@ -143,7 +143,7 @@
 
       <WaitRobotOutsideElevator
           elevator_yaml="{elev_yaml}"
-          world_frame="world"
+          world_frame="map"
           base_frame="base_link"
           timeout="60.0"/>
 

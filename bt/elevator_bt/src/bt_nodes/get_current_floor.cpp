@@ -18,7 +18,7 @@ GetCurrentFloor::GetCurrentFloor(const std::string & name,
 BT::PortsList GetCurrentFloor::providedPorts()
 {
   return {
-    BT::InputPort<std::string>("world_frame", "world"),
+    BT::InputPort<std::string>("world_frame", "map"),
     BT::InputPort<std::string>("base_frame", "base_link"),
     BT::OutputPort<int>("start_floor")
   };
@@ -26,7 +26,7 @@ BT::PortsList GetCurrentFloor::providedPorts()
 
 BT::NodeStatus GetCurrentFloor::tick()
 {
-  std::string world_frame = "world";
+  std::string world_frame = "map";
   std::string base_frame  = "base_link";
   getInput("world_frame", world_frame);
   getInput("base_frame", base_frame);

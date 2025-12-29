@@ -13,6 +13,8 @@ find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(yaml-cpp REQUIRED)
+find_package(ament_index_cpp REQUIRED)
 
 include_directories(
   include
@@ -22,11 +24,8 @@ add_executable(door_bt_runner
 )
 
 add_library(door_bt_nodes SHARED
-  src/bt_nodes/check_path_uses_door.cpp
-  src/bt_nodes/is_robot_in_door_radius.cpp 
-  src/bt_nodes/is_robot_past_door.cpp        
-  src/bt_nodes/set_door_open.cpp     
   src/bt_nodes/bt_plugin.cpp
+  src/bt_nodes/door_plan_controller.cpp
 )
 
 ament_target_dependencies(door_bt_nodes
@@ -36,6 +35,7 @@ ament_target_dependencies(door_bt_nodes
   tf2_ros                                  
   geometry_msgs     
   std_msgs
+  ament_index_cpp
 )
 
 target_link_libraries(door_bt_runner
@@ -61,6 +61,16 @@ install(
   DIRECTORY include/
   DESTINATION include
 )
+
+install(DIRECTORY config
+  DESTINATION share/${PROJECT_NAME}
+)
+if(TARGET yaml-cpp)
+  target_link_libraries(door_bt_nodes yaml-cpp)
+else()  
+  find_package(YAML-CPP REQUIRED)
+  target_link_libraries(door_bt_nodes ${YAML_CPP_LIBRARIES})
+endif()
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights

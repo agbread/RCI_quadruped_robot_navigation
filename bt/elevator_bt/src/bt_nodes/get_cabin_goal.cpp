@@ -47,14 +47,12 @@ GetCabinGoal::makeCabinGoal(const std::string& yaml_path, int /*floor_idx*/)
 
   geometry_msgs::msg::PoseStamped goal;
 
-  // frame_id는 world 기준이라고 가정 (추측입니다: elevator plugin도 world 기준으로 동작한다고 가정)
-  goal.header.frame_id = "world";
+  goal.header.frame_id = "map";
   goal.header.stamp = rclcpp::Clock().now();
 
   goal.pose.position.x = 0.5 * (min_x + max_x);
   goal.pose.position.y = 0.5 * (min_y + max_y);
 
-  // Nav2는 보통 2D로 쓰니까 z는 0으로 두어도 무방할 가능성이 높음 (추측입니다)
   goal.pose.position.z = 0.0;
 
   goal.pose.orientation.x = 0.0;
@@ -65,4 +63,4 @@ GetCabinGoal::makeCabinGoal(const std::string& yaml_path, int /*floor_idx*/)
   return goal;
 }
 
-}  // namespace elevator_bt
+}  

@@ -236,7 +236,8 @@
         <ros>
           <namespace>/</namespace>
         </ros>
-        <world_frame>world</world_frame>
+        <world_frame>map</world_frame>
+        <odom_frame>odom</odom_frame>
         <base_frame>base_link</base_frame>
       </plugin>
     </gazebo>
