@@ -4,4 +4,5 @@
 BT_REGISTER_NODES(factory)
 {
   factory.registerNodeType<DoorPlanController>("DoorPlanController"); 
+
 }

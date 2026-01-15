@@ -5,6 +5,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <nav_msgs/msg/path.hpp>
 #include <std_msgs/msg/bool.hpp>
+#include <std_msgs/msg/string.hpp>
 #include <std_msgs/msg/float64_multi_array.hpp>
 
 #include <tf2_ros/buffer.h>
@@ -14,6 +15,7 @@
 #include <ament_index_cpp/get_package_share_directory.hpp>
 
 #include <mutex>
+#include <atomic>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -67,6 +69,8 @@ private:
   // ROS
   rclcpp::Node::SharedPtr node_;
   rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr sub_plan_;
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub_config_yaml_;
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr sub_enabled_;
   std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
 
@@ -79,9 +83,21 @@ private:
   std::string world_frame_{"map"};
   std::string base_frame_{"base_link"};
 
+  // runtime control topics
+  std::string config_yaml_topic_{"/door_controller/config_yaml"};
+  std::string enabled_topic_{"/door_controller/enabled"};
+
+  // enable gate (층 이동 등에서 오동작 방지)
+  bool enabled_{true};
+
+  // YAML hot-reload
+  std::mutex cfg_mtx_;
+  std::atomic<bool> reload_requested_{false};
+  std::string pending_yaml_;
+
   bool require_feedback_{true};
-  double open_threshold_{0.05};     // 확실하지 않음: door_pos 스케일 보고 조정
-  double close_threshold_{0.02};    // 확실하지 않음
+  double open_threshold_{0.05};
+  double close_threshold_{0.02};
   double feedback_timeout_s_{5.0};
   double cooldown_s_{1.0};
 
@@ -109,11 +125,16 @@ private:
   // callbacks
   void planCb(const nav_msgs::msg::Path::SharedPtr msg);
   void doorPosCb(const std::string& ns, const std_msgs::msg::Float64MultiArray::SharedPtr msg);
+  void configYamlCb(const std_msgs::msg::String::SharedPtr msg);
+  void enabledCb(const std_msgs::msg::Bool::SharedPtr msg);
 
   // load/parse
   std::string resolvePathMaybeInShare(const std::string& path) const;
   bool loadDoorsFromYaml(const std::string& yaml_path, std::vector<DoorDef>& out, std::string& err);
   bool parseDoorsString(const std::string& s, std::vector<DoorDef>& out, std::string& err);
+
+  // hot-reload
+  bool reloadDoorsIfRequested();
 
   void ensureDoorIO(const DoorDef& d);
 

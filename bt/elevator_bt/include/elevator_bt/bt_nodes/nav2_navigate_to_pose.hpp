@@ -17,13 +17,13 @@
 namespace elevator_bt
 {
 
-class Nav2NavigateToPose : public BT::StatefulActionNode
+class Nav2NavigateToPose1 : public BT::StatefulActionNode
 {
 public:
   using NavigateToPose           = nav2_msgs::action::NavigateToPose;
   using GoalHandleNavigateToPose = rclcpp_action::ClientGoalHandle<NavigateToPose>;
 
-  Nav2NavigateToPose(const std::string & name,
+  Nav2NavigateToPose1(const std::string & name,
                      const BT::NodeConfiguration & config);
 
   static BT::PortsList providedPorts()

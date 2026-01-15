@@ -27,7 +27,6 @@ add_executable(elevator_bt_runner
   src/bt_nodes/wait_robot_inside_cabin.cpp
   src/bt_nodes/wait_robot_outside_elevator.cpp
   src/bt_nodes/elevator_client.cpp
-  src/bt_nodes/get_current_floor.cpp
   src/bt_nodes/select_nearest_elevator.cpp
   src/bt_nodes/get_cabin_goal.cpp
   src/bt_nodes/wait_floor_command.cpp 
@@ -79,17 +78,20 @@ install(DIRECTORY bt_trees/
   src/bt_nodes/wait_robot_inside_cabin.cpp
   src/bt_nodes/wait_robot_outside_elevator.cpp
   src/bt_nodes/elevator_client.cpp
-  src/bt_nodes/get_current_floor.cpp
   src/bt_nodes/select_nearest_elevator.cpp
   src/bt_nodes/get_cabin_goal.cpp
   src/bt_nodes/wait_floor_command.cpp 
   src/bt_nodes/elevator_bt_nav2_plugin.cpp    
+  src/bt_nodes/nav2_navigate_to_pose.cpp  
+
 )
 
 target_include_directories(elevator_bt_nav2 PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
+
+target_compile_definitions(elevator_bt_nav2 PRIVATE BT_PLUGIN_EXPORT)
 
 ament_target_dependencies(elevator_bt_nav2
   rclcpp
@@ -98,6 +100,7 @@ ament_target_dependencies(elevator_bt_nav2
   tf2
   tf2_ros
   std_msgs
+  nav2_msgs
 )
 
 if(TARGET yaml-cpp)

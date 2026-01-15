@@ -1,8 +1,8 @@
 #include <rclcpp/rclcpp.hpp>
 #include <behaviortree_cpp_v3/bt_factory.h>
 
-
-#include "door_bt/bt_nodes/door_plan_controller.hpp"  
+#include <ament_index_cpp/get_package_share_directory.hpp>
+#include "door_bt/bt_nodes/door_plan_controller.hpp"
 
 int main(int argc, char** argv)
 {
@@ -10,11 +10,24 @@ int main(int argc, char** argv)
   auto node = std::make_shared<rclcpp::Node>("door_bt_runner");
 
   BT::BehaviorTreeFactory factory;
-
   factory.registerNodeType<DoorPlanController>("DoorPlanController");
 
-  std::string tree_file =
-    "/home/home/ros2_ws/src/RCI_quadruped_robot_navigation/bt/door_bt/bt_trees/tests/door_plan_controller_L1.xml";
+  node->declare_parameter<std::string>("bt_xml_file", "bt_trees/tests/door_bt_RCI.xml");
+  std::string tree_file = node->get_parameter("bt_xml_file").as_string();
+
+  // 상대 경로면 door_bt share 밑에서 찾기
+  if (!tree_file.empty() && tree_file[0] != '/')
+  {
+    try
+    {
+      const auto share = ament_index_cpp::get_package_share_directory("door_bt");
+      tree_file = share + "/" + tree_file;
+    }
+    catch (...)
+    {
+      // 설치/소스 혼재 시 share를 못 찾을 수도 있음 (확실하지 않음)
+    }
+  }
 
   RCLCPP_INFO(node->get_logger(), "Using BT XML: %s", tree_file.c_str());
 

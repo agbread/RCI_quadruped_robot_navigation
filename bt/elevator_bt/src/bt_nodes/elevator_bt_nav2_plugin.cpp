@@ -7,16 +7,15 @@
 #include "elevator_bt/bt_nodes/wait_robot_near_elevator.hpp"
 #include "elevator_bt/bt_nodes/wait_robot_inside_cabin.hpp"
 #include "elevator_bt/bt_nodes/wait_robot_outside_elevator.hpp"
-#include "elevator_bt/bt_nodes/get_current_floor.hpp"
 #include "elevator_bt/bt_nodes/select_nearest_elevator.hpp"
 #include "elevator_bt/bt_nodes/get_cabin_goal.hpp"
 #include "elevator_bt/bt_nodes/wait_floor_command.hpp"
+#include "elevator_bt/bt_nodes/nav2_navigate_to_pose.hpp"
 
 using namespace elevator_bt;
 
 BT_REGISTER_NODES(factory)
 {
-  // XML에서 쓰는 태그 이름이랑 **완전히 동일**해야 함
   factory.registerNodeType<Ok>("Ok");
 
   factory.registerNodeType<CallElevatorToFloor>("CallElevatorToFloor");
@@ -28,9 +27,9 @@ BT_REGISTER_NODES(factory)
   factory.registerNodeType<WaitRobotInsideCabin>("WaitRobotInsideCabin");
   factory.registerNodeType<WaitRobotOutsideElevator>("WaitRobotOutsideElevator");
 
-  factory.registerNodeType<GetCurrentFloor>("GetCurrentFloor");
   factory.registerNodeType<SelectNearestElevator>("SelectNearestElevator");
   factory.registerNodeType<GetCabinGoal>("GetCabinGoal");
   factory.registerNodeType<WaitFloorCommand>("WaitFloorCommand");
+  factory.registerNodeType<Nav2NavigateToPose1>("Nav2NavigateToPose1");
 
 }
