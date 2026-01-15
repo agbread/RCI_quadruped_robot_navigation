@@ -7,7 +7,6 @@
 
 #include "stair_bt/bt_nodes/get_target_floor_from_topic.hpp"
 #include "stair_bt/bt_nodes/check_floor_different.hpp"
-#include "stair_bt/bt_nodes/get_current_floor.hpp"
 #include "stair_bt/bt_nodes/select_stair_entrance.hpp"
 #include "stair_bt/bt_nodes/nav2_navigate_to_pose.hpp"
 #include "stair_bt/bt_nodes/compute_next_floor.hpp"
@@ -23,9 +22,8 @@ BT_REGISTER_NODES(factory)
 
   factory.registerNodeType<GetTargetFloorFromTopic>("GetTargetFloorFromTopic");
   factory.registerNodeType<CheckFloorDifferent>("CheckFloorDifferent");
-  factory.registerNodeType<GetCurrentFloor>("GetCurrentFloor");
   factory.registerNodeType<SelectStairEntrance>("SelectStairEntrance");
-  factory.registerNodeType<Nav2NavigateToPose>("Nav2NavigateToPose");
-  factory.registerNodeType<stair_bt::ComputeNextFloor>("ComputeNextFloor");
+  factory.registerNodeType<Nav2NavigateToPose2>("Nav2NavigateToPose2");
+  factory.registerNodeType<ComputeNextFloor>("ComputeNextFloor");
 
 }

@@ -17,10 +17,10 @@
 namespace stair_bt
 {
 
-class Nav2NavigateToPose : public BT::StatefulActionNode
+class Nav2NavigateToPose2 : public BT::StatefulActionNode
 {
 public:
-  Nav2NavigateToPose(const std::string & name, const BT::NodeConfiguration & config);
+  Nav2NavigateToPose2(const std::string & name, const BT::NodeConfiguration & config);
 
   static BT::PortsList providedPorts()
   {

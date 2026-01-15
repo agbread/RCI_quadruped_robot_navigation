@@ -18,7 +18,6 @@ BT::NodeStatus GetCabinGoal::tick()
   }
 
   int floor_idx = 0;
-  // floor_idx는 현재 계산에는 사용하지 않지만, 포트만 읽어서 보관 가능
   getInput("floor_idx", floor_idx);
 
   auto goal = makeCabinGoal(yaml_path, floor_idx);

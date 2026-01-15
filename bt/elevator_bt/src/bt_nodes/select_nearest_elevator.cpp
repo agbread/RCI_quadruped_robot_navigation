@@ -56,7 +56,7 @@ BT::PortsList SelectNearestElevator::providedPorts()
   return {
     BT::InputPort<std::string>("world_frame", "map"),
     BT::InputPort<std::string>("base_frame", "base_link"),
-    BT::InputPort<int>("start_floor"),
+    BT::InputPort<int>("current_floor"),
     BT::InputPort<std::string>("lift1_yaml"),
     BT::InputPort<std::string>("lift2_yaml"),
     // outputs
@@ -223,11 +223,11 @@ BT::NodeStatus SelectNearestElevator::tick()
   getInput("world_frame", world_frame);
   getInput("base_frame",  base_frame);
 
-  int start_floor = 0;
-  if (!getInput("start_floor", start_floor))
+  int current_floor = 0;
+  if (!getInput("current_floor", current_floor))
   {
     RCLCPP_ERROR(node_->get_logger(),
-      "[SelectNearestElevator] Missing input port: start_floor");
+      "[SelectNearestElevator] Missing input port: current_floor");
     return BT::NodeStatus::FAILURE;
   }
 
@@ -259,8 +259,8 @@ BT::NodeStatus SelectNearestElevator::tick()
 
   // --- YAML에서 입구 좌표 읽기 ---
   EntranceInfo e1, e2;
-  if (!loadEntrance(lift1_yaml, start_floor, e1) ||
-      !loadEntrance(lift2_yaml, start_floor, e2))
+  if (!loadEntrance(lift1_yaml, current_floor, e1) ||
+      !loadEntrance(lift2_yaml, current_floor, e2))
   {
     // 에러는 loadEntrance에서 로그 찍음
     return BT::NodeStatus::FAILURE;

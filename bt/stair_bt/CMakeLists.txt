@@ -29,7 +29,6 @@ add_library(stair_bt_nav2 SHARED
   src/bt_nodes/climb_flight_rl.cpp
   src/bt_nodes/get_target_floor_from_topic.cpp
   src/bt_nodes/check_floor_different.cpp
-  src/bt_nodes/get_current_floor.cpp
   src/bt_nodes/select_stair_entrance.cpp
   src/stair_bt_nav2_plugin.cpp
   src/bt_nodes/nav2_navigate_to_pose.cpp  

@@ -6,11 +6,11 @@
 namespace stair_bt
 {
 
-Nav2NavigateToPose::Nav2NavigateToPose(
+Nav2NavigateToPose2::Nav2NavigateToPose2(
   const std::string & name,
   const BT::NodeConfiguration & config)
 : BT::StatefulActionNode(name, config),
-  logger_(rclcpp::get_logger("Nav2NavigateToPose"))
+  logger_(rclcpp::get_logger("Nav2NavigateToPose2"))
 {
   node_ = rclcpp::Node::make_shared("nav2_navigate_to_pose_bt_node");
 
@@ -21,11 +21,11 @@ Nav2NavigateToPose::Nav2NavigateToPose(
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 }
 
-BT::NodeStatus Nav2NavigateToPose::onStart()
+BT::NodeStatus Nav2NavigateToPose2::onStart()
 {
   if (!getInput("entry_pose", goal_pose_))
   {
-    RCLCPP_ERROR(logger_, "[Nav2NavigateToPose] missing input [entry_pose]");
+    RCLCPP_ERROR(logger_, "[Nav2NavigateToPose2] missing input [entry_pose]");
     return BT::NodeStatus::FAILURE;
   }
 
@@ -38,13 +38,13 @@ BT::NodeStatus Nav2NavigateToPose::onStart()
 
   if (goal_pose_.header.frame_id.empty())
   {
-    RCLCPP_ERROR(logger_, "[Nav2NavigateToPose] entry_pose.header.frame_id is empty");
+    RCLCPP_ERROR(logger_, "[Nav2NavigateToPose2] entry_pose.header.frame_id is empty");
     return BT::NodeStatus::FAILURE;
   }
 
   if (!action_client_->wait_for_action_server(std::chrono::seconds(2)))
   {
-    RCLCPP_ERROR(logger_, "[Nav2NavigateToPose] navigate_to_pose action server not available");
+    RCLCPP_ERROR(logger_, "[Nav2NavigateToPose2] navigate_to_pose action server not available");
     return BT::NodeStatus::FAILURE;
   }
 
@@ -56,11 +56,11 @@ BT::NodeStatus Nav2NavigateToPose::onStart()
   return BT::NodeStatus::RUNNING;
 }
 
-BT::NodeStatus Nav2NavigateToPose::onRunning()
+BT::NodeStatus Nav2NavigateToPose2::onRunning()
 {
   if ((node_->now() - goal_start_time_).seconds() > timeout_sec_)
   {
-    RCLCPP_WARN(logger_, "[Nav2NavigateToPose] timeout %.1f s", timeout_sec_);
+    RCLCPP_WARN(logger_, "[Nav2NavigateToPose2] timeout %.1f s", timeout_sec_);
     if (goal_sent_ && current_goal_handle_)
     {
       action_client_->async_cancel_goal(current_goal_handle_);
@@ -80,7 +80,7 @@ BT::NodeStatus Nav2NavigateToPose::onRunning()
   {
     RCLCPP_WARN_THROTTLE(
       logger_, *node_->get_clock(), 2000,
-      "[Nav2NavigateToPose] waiting TF (%s->%s): %s",
+      "[Nav2NavigateToPose2] waiting TF (%s->%s): %s",
       goal_pose_.header.frame_id.c_str(), base_frame_.c_str(), ex.what());
     return BT::NodeStatus::RUNNING;
   }
@@ -107,14 +107,14 @@ BT::NodeStatus Nav2NavigateToPose::onRunning()
     {
       RCLCPP_ERROR(
         logger_,
-        "[Nav2NavigateToPose] Failed to send goal (ret=%d)", static_cast<int>(ret));
+        "[Nav2NavigateToPose2] Failed to send goal (ret=%d)", static_cast<int>(ret));
       return BT::NodeStatus::FAILURE;
     }
 
     current_goal_handle_ = future_goal_handle.get();
     if (!current_goal_handle_)
     {
-      RCLCPP_ERROR(logger_, "[Nav2NavigateToPose] Goal was rejected by server");
+      RCLCPP_ERROR(logger_, "[Nav2NavigateToPose2] Goal was rejected by server");
       return BT::NodeStatus::FAILURE;
     }
 
@@ -122,7 +122,7 @@ BT::NodeStatus Nav2NavigateToPose::onRunning()
 
     RCLCPP_INFO(
       logger_,
-      "[Nav2NavigateToPose] Goal sent (frame=%s, x=%.3f, y=%.3f, z(current)=%.3f), "
+      "[Nav2NavigateToPose2] Goal sent (frame=%s, x=%.3f, y=%.3f, z(current)=%.3f), "
       "success_radius=%.2f timeout=%.1f base_frame=%s",
       goal_pose_.header.frame_id.c_str(),
       goal_pose_.pose.position.x,
@@ -142,7 +142,7 @@ BT::NodeStatus Nav2NavigateToPose::onRunning()
   {
     RCLCPP_INFO(
       logger_,
-      "[Nav2NavigateToPose] close enough (dist=%.3f < %.3f), cancel goal and SUCCESS",
+      "[Nav2NavigateToPose2] close enough (dist=%.3f < %.3f), cancel goal and SUCCESS",
       dist, success_radius_);
 
     action_client_->async_cancel_goal(current_goal_handle_);
@@ -164,7 +164,7 @@ BT::NodeStatus Nav2NavigateToPose::onRunning()
   {
     RCLCPP_ERROR(
       logger_,
-      "[Nav2NavigateToPose] Failed to get result (ret=%d)", static_cast<int>(ret));
+      "[Nav2NavigateToPose2] Failed to get result (ret=%d)", static_cast<int>(ret));
     goal_sent_ = false;
     current_goal_handle_.reset();
     return BT::NodeStatus::FAILURE;
@@ -175,12 +175,12 @@ BT::NodeStatus Nav2NavigateToPose::onRunning()
 
   RCLCPP_INFO(
     logger_,
-    "[Nav2NavigateToPose] navigation finished with code %d",
+    "[Nav2NavigateToPose2] navigation finished with code %d",
     static_cast<int>(code));
 
   if (code == rclcpp_action::ResultCode::CANCELED)
   {
-    RCLCPP_WARN(logger_, "[Nav2NavigateToPose] navigation CANCELED");
+    RCLCPP_WARN(logger_, "[Nav2NavigateToPose2] navigation CANCELED");
     goal_sent_ = false;
     current_goal_handle_.reset();
     return BT::NodeStatus::FAILURE;
@@ -191,11 +191,11 @@ BT::NodeStatus Nav2NavigateToPose::onRunning()
   return BT::NodeStatus::SUCCESS;
 }
 
-void Nav2NavigateToPose::onHalted()
+void Nav2NavigateToPose2::onHalted()
 {
   if (goal_sent_ && current_goal_handle_)
   {
-    RCLCPP_INFO(logger_, "[Nav2NavigateToPose] Halted, cancel goal");
+    RCLCPP_INFO(logger_, "[Nav2NavigateToPose2] Halted, cancel goal");
     action_client_->async_cancel_goal(current_goal_handle_);
   }
   goal_sent_ = false;

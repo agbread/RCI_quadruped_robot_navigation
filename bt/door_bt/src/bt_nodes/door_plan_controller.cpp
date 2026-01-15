@@ -6,6 +6,14 @@
 #include <algorithm>
 #include <cctype>
 
+static std::string trim_copy(std::string x)
+{
+  auto issp = [](int c){ return std::isspace(c); };
+  x.erase(x.begin(), std::find_if(x.begin(), x.end(), [&](int c){ return !issp(c); }));
+  x.erase(std::find_if(x.rbegin(), x.rend(), [&](int c){ return !issp(c); }).base(), x.end());
+  return x;
+}
+
 DoorPlanController::DoorPlanController(const std::string& name,
                                        const BT::NodeConfiguration& config)
 : BT::StatefulActionNode(name, config)
@@ -30,7 +38,11 @@ BT::PortsList DoorPlanController::providedPorts()
     BT::InputPort<double>("open_threshold", "default: 0.05"),
     BT::InputPort<double>("close_threshold", "default: 0.02"),
     BT::InputPort<double>("feedback_timeout_s", "default: 5.0"),
-    BT::InputPort<double>("cooldown_s", "default: 1.0")
+    BT::InputPort<double>("cooldown_s", "default: 1.0"),
+
+    // runtime control (optional)
+    BT::InputPort<std::string>("config_yaml_topic", "default: /door_controller/config_yaml"),
+    BT::InputPort<std::string>("enabled_topic", "default: /door_controller/enabled")
   };
 }
 
@@ -53,12 +65,16 @@ void DoorPlanController::doorPosCb(const std::string& ns,
   io.last_pos_time = node_->now();
 }
 
-static std::string trim_copy(std::string x)
+void DoorPlanController::configYamlCb(const std_msgs::msg::String::SharedPtr msg)
 {
-  auto issp = [](int c){ return std::isspace(c); };
-  x.erase(x.begin(), std::find_if(x.begin(), x.end(), [&](int c){ return !issp(c); }));
-  x.erase(std::find_if(x.rbegin(), x.rend(), [&](int c){ return !issp(c); }).base(), x.end());
-  return x;
+  std::lock_guard<std::mutex> lk(cfg_mtx_);
+  pending_yaml_ = msg->data;
+  reload_requested_.store(true);
+}
+
+void DoorPlanController::enabledCb(const std_msgs::msg::Bool::SharedPtr msg)
+{
+  enabled_ = msg->data;
 }
 
 std::string DoorPlanController::resolvePathMaybeInShare(const std::string& path) const
@@ -73,7 +89,7 @@ std::string DoorPlanController::resolvePathMaybeInShare(const std::string& path)
   }
   catch (...)
   {
-    return path; // 확실하지 않음: 설치/소스 환경 혼재 시
+    return path; // 설치/소스 환경 혼재 시 (확실하지 않음)
   }
 }
 
@@ -193,7 +209,7 @@ void DoorPlanController::ensureDoorIO(const DoorDef& d)
   DoorIO io;
   io.pub_cmd = node_->create_publisher<std_msgs::msg::Bool>(d.ns + "/door_open", 10);
 
-  // ✅ door_pos 타입은 너가 확인해준 대로 Float64MultiArray “확정”
+  // ✅ door_pos 타입: Float64MultiArray
   io.sub_pos = node_->create_subscription<std_msgs::msg::Float64MultiArray>(
     d.ns + "/door_pos", rclcpp::QoS(10),
     [this, ns=d.ns](const std_msgs::msg::Float64MultiArray::SharedPtr msg){
@@ -208,6 +224,53 @@ void DoorPlanController::ensureDoorIO(const DoorDef& d)
   RCLCPP_INFO(node_->get_logger(),
     "Door IO ready: %s (open=%s, pos=%s)",
     d.ns.c_str(), (d.ns + "/door_open").c_str(), (d.ns + "/door_pos").c_str());
+}
+
+bool DoorPlanController::reloadDoorsIfRequested()
+{
+  if (!reload_requested_.exchange(false))
+    return false;
+
+  std::string new_yaml;
+  {
+    std::lock_guard<std::mutex> lk(cfg_mtx_);
+    new_yaml = pending_yaml_;
+  }
+
+  new_yaml = trim_copy(new_yaml);
+  if (new_yaml.empty())
+    return false;
+  if (new_yaml == doors_yaml_)
+    return false;
+
+  std::vector<DoorDef> new_doors;
+  std::string err;
+  if (!loadDoorsFromYaml(new_yaml, new_doors, err))
+  {
+    RCLCPP_ERROR(node_->get_logger(), "failed to reload doors_yaml [%s]: %s",
+                 new_yaml.c_str(), err.c_str());
+    return false;
+  }
+
+  // swap config
+  doors_yaml_ = new_yaml;
+  doors_ = std::move(new_doors);
+
+  // ensure IO + reset runtime (층 변경 시 상태를 초기화)
+  for (const auto& d : doors_)
+  {
+    ensureDoorIO(d);
+    rt_[d.ns] = DoorRuntime{};
+  }
+
+  processed_in_plan_.clear();
+  done_time_.clear();
+  last_plan_stamp_ = rclcpp::Time(0,0,node_->get_clock()->get_clock_type());
+  last_plan_size_ = 0;
+
+  RCLCPP_INFO(node_->get_logger(), "Door config reloaded: %s (doors=%zu)",
+              doors_yaml_.c_str(), doors_.size());
+  return true;
 }
 
 bool DoorPlanController::getRobotXY(double& x, double& y)
@@ -346,6 +409,8 @@ BT::NodeStatus DoorPlanController::onStart()
   (void)getInput("feedback_timeout_s", feedback_timeout_s_);
   (void)getInput("cooldown_s", cooldown_s_);
   (void)getInput("doors_yaml", doors_yaml_);
+  (void)getInput("config_yaml_topic", config_yaml_topic_);
+  (void)getInput("enabled_topic", enabled_topic_);
 
   std::string err;
 
@@ -376,6 +441,15 @@ BT::NodeStatus DoorPlanController::onStart()
     plan_topic_, rclcpp::QoS(1),
     std::bind(&DoorPlanController::planCb, this, std::placeholders::_1));
 
+  // runtime control subscriptions
+  sub_config_yaml_ = node_->create_subscription<std_msgs::msg::String>(
+    config_yaml_topic_, rclcpp::QoS(10),
+    std::bind(&DoorPlanController::configYamlCb, this, std::placeholders::_1));
+
+  sub_enabled_ = node_->create_subscription<std_msgs::msg::Bool>(
+    enabled_topic_, rclcpp::QoS(10),
+    std::bind(&DoorPlanController::enabledCb, this, std::placeholders::_1));
+
   for (const auto& d : doors_) ensureDoorIO(d);
 
   processed_in_plan_.clear();
@@ -383,8 +457,13 @@ BT::NodeStatus DoorPlanController::onStart()
   last_plan_size_ = 0;
 
   RCLCPP_INFO(node_->get_logger(),
-    "DoorPlanController started (CONCURRENT): plan=%s world=%s base=%s doors=%zu",
-    plan_topic_.c_str(), world_frame_.c_str(), base_frame_.c_str(), doors_.size());
+    "DoorPlanController started (CONCURRENT): plan=%s world=%s base=%s doors=%zu (cfg_topic=%s enabled_topic=%s)",
+    plan_topic_.c_str(),
+    world_frame_.c_str(),
+    base_frame_.c_str(),
+    doors_.size(),
+    config_yaml_topic_.c_str(),
+    enabled_topic_.c_str());
 
   return BT::NodeStatus::RUNNING;
 }
@@ -392,6 +471,15 @@ BT::NodeStatus DoorPlanController::onStart()
 BT::NodeStatus DoorPlanController::onRunning()
 {
   rclcpp::spin_some(node_);
+
+  // YAML hot-reload (층 변경 시 topic으로 갱신)
+  (void)reloadDoorsIfRequested();
+
+  // enable gate (엘리베이터/계단 이동 등에서 오동작 방지)
+  if (!enabled_)
+  {
+    return BT::NodeStatus::RUNNING;
+  }
 
   nav_msgs::msg::Path::SharedPtr plan;
   {
@@ -456,7 +544,7 @@ BT::NodeStatus DoorPlanController::onRunning()
       // 아직 닫힘 확인 안 됐으면 close publish (스팸은 rt.has_last_cmd로 방지)
       publishCmd(d.ns, false);
 
-      // timeout이면 “닫힘으로 간주” (문이 실제로 닫히는지 보장은 확실하지 않음)
+      // timeout이면 “닫힘으로 간주” (닫힘 보장은 확실하지 않음)
       if ((node_->now() - rt.last_cmd_time).seconds() > feedback_timeout_s_)
       {
         rt.opened = false;
@@ -469,7 +557,6 @@ BT::NodeStatus DoorPlanController::onRunning()
     }
 
     // 2) 아직 처리 안 한 문 + plan에 포함 + 반경 안이면 → open 시도
-    //    (연속 2개 문이면 여기서 두 번째도 즉시 열림)
     if (inside)
     {
       if (processed_in_plan_.count(d.ns)) continue;
