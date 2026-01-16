@@ -9,7 +9,7 @@ This repository integrates reinforcement learning (RL), navigation, and simulati
   <img src="https://github.com/user-attachments/assets/ac0951fc-6ed5-4c84-96e0-210e1059e04f" alt="Stairs" width="49%" />
 </p>
 
-This project follows a Sim-to-Sim approach, executing controllers trained in Isaac Lab within the Gazebo simulator. The virtual Unitree Go2 and Go2W robots are equipped with a  LiDAR. The mounting position of the Velodyne VLP16 LiDAR is based on the [Unitree developer documentation](https://support.unitree.com/home/en/developer/SLAM%20and%20Navigation_service).
+This project follows a Sim-to-Sim approach, executing controllers trained in Isaac Lab within the Gazebo simulator. The virtual Unitree Go2, Go2W and B2 robots are equipped with a LiDAR. The mounting position of the Velodyne VLP16 LiDAR is based on the [Unitree developer documentation](https://support.unitree.com/home/en/developer/SLAM%20and%20Navigation_service).
 
 ## Prerequisites
 
@@ -31,8 +31,11 @@ Before you begin, ensure you have the following dependencies installed:
       ros-humble-gazebo-ros-pkgs \
       ros-humble-xacro \
       ros-humble-navigation2 \
+      ros-humble-nav2-bringup \
       ros-humble-octomap-ros\
       ros-humble-octomap-rviz-plugins\
+      ros-humble-velodyne-laserscan
+
     ```
 
 3.  **LibTorch (C++):**
@@ -106,8 +109,19 @@ Follow these steps to launch the simulation and control the robot. Each command 
     ```bash
     ros2 run rl_action command
     ```
-
-4. **Elevator Control (Optional Feature)** 
+    
+4. Execute Navigation (Nav2)
+  4.1 Convert Velodyne PointCloud2 -> LaserScan (/scan)
+  ```bash
+  ros2 run velodyne_laserscan velodyne_laserscan_node --ros-args \
+    -r velodyne_points:=/velodyne_points \
+    -r scan:=/scan
+  ```
+  4.2 Launch Nav2
+  ```bash
+  ros2 launch rl_sar nav2.launch.py
+  ```
+5. **Elevator Control (Optional Feature)** 
     This repository includes a Gazebo **Elevator Plugin** to simulate multi-floor vertical transport. 
     See below for detailed usage instructions.
 
@@ -154,7 +168,7 @@ Follow these steps to launch the simulation and control the robot. Each command 
     ros2 topic echo /lift1/door_pos
     ```
     
-5. **Door Control (Optional Feature)**  
+6. **Door Control (Optional Feature)**  
     This repository includes a Gazebo **Door Plugin** and a Behavior-Tree-based **Door Controller** to control doors in the simulated building via ROS 2.
     ![door_plugin](https://github.com/user-attachments/assets/5cbc78d2-b43d-4adc-a019-1a0dc1cd3005)
 
@@ -226,7 +240,7 @@ Follow these steps to launch the simulation and control the robot. Each command 
    ---
     ### Path Topic
     The BT node subscribes to the planned path topic:    
-    - `/planned_path`
+    - `/plan`
       
     This topic should contain the robot’s planned path (e.g., from a global planner) so that the BT can determine whether the path passes through any controlled doors.
 
@@ -239,7 +253,7 @@ Follow these steps to launch the simulation and control the robot. Each command 
 
    This allows the robot to traverse routes that include doors without any manual `ros2 topic pub` commands.
 
-6. **Stair locomotion (Optional Feature)**
+7. **Stair locomotion (Optional Feature)**
 
    #### 6.1 How it works (high-level behavior)
     
