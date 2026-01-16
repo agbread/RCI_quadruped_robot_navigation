@@ -2,13 +2,13 @@
 
 namespace elevator_bt {
 
-// ★ 생성자: node_/exec_/client_를 한 번에 구성 (재할당 금지)
 WaitCabinAtTarget::WaitCabinAtTarget(const std::string& name,
                                      const BT::NodeConfiguration& config)
 : BT::StatefulActionNode(name, config),
   node_(std::make_shared<rclcpp::Node>("wait_cabin_at_target")),
   exec_(std::make_shared<rclcpp::executors::SingleThreadedExecutor>()),
-  client_(node_)   // ElevatorClient는 Node를 받는 생성자 가정
+  client_(node_)   
+  
 {
   exec_->add_node(node_);
 }
@@ -55,10 +55,8 @@ BT::NodeStatus WaitCabinAtTarget::onStart()
     return BT::NodeStatus::FAILURE;
   }
 
-  // 첫 샘플 빨리 받도록 콜백 한 번
   exec_->spin_some();
 
-  // 타이머 초기화(실시간)
   t0_ = std::chrono::steady_clock::now();
   last_log_ = t0_;
   warmup_deadline_ = t0_ + std::chrono::seconds(2);
@@ -69,7 +67,6 @@ BT::NodeStatus WaitCabinAtTarget::onStart()
 
 BT::NodeStatus WaitCabinAtTarget::onRunning()
 {
-  // 콜백 실행(구독 갱신)
   exec_->spin_some();
 
   auto now = std::chrono::steady_clock::now();
@@ -82,7 +79,7 @@ BT::NodeStatus WaitCabinAtTarget::onRunning()
   double z = client_.cabinZ();
   if(std::isnan(z)) {
     if (now < warmup_deadline_) {
-      return BT::NodeStatus::RUNNING; // 웜업 대기
+      return BT::NodeStatus::RUNNING; 
     } else {
       RCLCPP_WARN_THROTTLE(node_->get_logger(), *(node_->get_clock()), 2000,
                            "[WaitCabinAtTarget] cabin_z is NaN");
@@ -105,7 +102,6 @@ BT::NodeStatus WaitCabinAtTarget::onRunning()
     settle_started_ = false;
   }
 
-  // 1초 주기 디버그 로그
   if (std::chrono::duration<double>(now - last_log_).count() > 1.0) {
     RCLCPP_INFO(node_->get_logger(),
       "[WaitCabinAtTarget] z=%.3f, target=%.3f, diff=%.3f, tol=%.3f, inside=%s",
@@ -119,7 +115,6 @@ BT::NodeStatus WaitCabinAtTarget::onRunning()
 
 void WaitCabinAtTarget::onHalted()
 {
-  // 필요 시 중단 처리
 }
 
 } // namespace elevator_bt

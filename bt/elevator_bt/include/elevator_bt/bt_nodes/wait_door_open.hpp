@@ -8,7 +8,6 @@ namespace elevator_bt {
 
 class WaitDoorOpen : public BT::StatefulActionNode {
 public:
-  // 선언만 두고 구현은 .cpp
   WaitDoorOpen(const std::string& name, const BT::NodeConfiguration& config);
 
   static BT::PortsList providedPorts() {
@@ -31,7 +30,6 @@ private:
   rclcpp::Node::SharedPtr node_;
   ElevatorClient client_;
 
-  // 내부 파라미터
   double threshold_{0.5};     // |door_a| + |door_b|
   bool   want_open_{true};
   double timeout_{20.0};

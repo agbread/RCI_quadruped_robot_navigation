@@ -10,8 +10,7 @@ namespace floor_change_bt
 
 static std::string make_unique_node_name()
 {
-  // ROS node name 규칙에 맞게: 영문/숫자/언더스코어만 사용
-  // this 포인터 주소로 유니크하게 만듦
+
   std::ostringstream oss;
   oss << "get_current_floor_" << std::hex
       << static_cast<std::uintptr_t>(reinterpret_cast<std::uintptr_t>(&oss));
@@ -22,7 +21,6 @@ GetCurrentFloor::GetCurrentFloor(const std::string& name,
                                  const BT::NodeConfiguration& config)
 : BT::StatefulActionNode(name, config)
 {
-  // 통합 runner에서 동일 노드가 여러 개 생겨도 충돌 안 나게 유니크 이름 사용
   node_ = std::make_shared<rclcpp::Node>(make_unique_node_name());
   tf_buffer_ = std::make_shared<tf2_ros::Buffer>(node_->get_clock());
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
@@ -68,12 +66,11 @@ BT::NodeStatus GetCurrentFloor::onRunning()
       1000,
       "[GetCurrentFloor] TF %s->%s 아직 없음: %s",
       map_frame.c_str(), base_frame.c_str(), ex.what());
-    return BT::NodeStatus::RUNNING;  // stair 기준: 기다림
+    return BT::NodeStatus::RUNNING;  
   }
 
   const double z = tf.transform.translation.z;
 
-  // stair_bt 기준과 동일: f1/f2만으로 0/1/2층 판정
   int floor = 0;
   if (z < f1) {
     floor = 0;

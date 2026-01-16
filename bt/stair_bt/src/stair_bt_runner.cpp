@@ -24,7 +24,6 @@ int main(int argc, char ** argv)
 
   factory.registerFromPlugin("libstair_bt_nav2.so");
 
-  // 트리 생성
   BT::Tree tree;
   try
   {
