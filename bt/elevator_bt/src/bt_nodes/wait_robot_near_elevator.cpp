@@ -65,7 +65,6 @@ BT::NodeStatus WaitRobotNearElevator::onRunning()
   }
   catch (const tf2::TransformException& ex)
   {
-    // TF 아직 준비 안 됐으면 계속 대기
     RCLCPP_DEBUG(node_->get_logger(),
                  "[WaitRobotNearElevator] TF lookup failed: %s", ex.what());
     return BT::NodeStatus::RUNNING;
@@ -79,8 +78,7 @@ BT::NodeStatus WaitRobotNearElevator::onRunning()
   double cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z);
   const double yaw = std::atan2(siny_cosp, cosy_cosp);
 
-  // base_link → front point (앞부분)
-  const double dx = zones_.front_offset; // 로봇 좌표계 +x 방향 앞 (확실하지 않음)
+  const double dx = zones_.front_offset; 
   const double dy = 0.0;
 
   const double cos_yaw = std::cos(yaw);

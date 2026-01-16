@@ -162,7 +162,6 @@ BT::NodeStatus AlignWithStairs::onRunning()
   try {
     tf = tf_buffer_->lookupTransform(world_frame_, base_frame_, tf2::TimePointZero);
   } catch (const tf2::TransformException & ex) {
-    // TF 없으면 "기다림"
     RCLCPP_WARN_THROTTLE(node_->get_logger(), *node_->get_clock(), 1000,
                          "[AlignWithStairs] TF %s->%s 대기중: %s",
                          world_frame_.c_str(), base_frame_.c_str(), ex.what());

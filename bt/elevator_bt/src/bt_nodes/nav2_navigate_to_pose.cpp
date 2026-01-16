@@ -122,7 +122,6 @@ BT::NodeStatus Nav2NavigateToPose1::onRunning()
 
   const double dist = std::hypot(gx - rx, gy - ry);
 
-  // 2) 일정 거리 안이면 성공으로 간주
   if (dist < success_radius_)
   {
     RCLCPP_INFO(
@@ -139,7 +138,6 @@ BT::NodeStatus Nav2NavigateToPose1::onRunning()
     return BT::NodeStatus::SUCCESS;
   }
 
-  // 3) 아직 멀면 액션 결과도 체크 (안정성을 위해 유지)
   auto result_future =
     action_client_->async_get_result(current_goal_handle_);
 
@@ -148,7 +146,6 @@ BT::NodeStatus Nav2NavigateToPose1::onRunning()
 
   if (ret == rclcpp::FutureReturnCode::TIMEOUT)
   {
-    // 아직 진행 중 → 계속 RUNNING
     return BT::NodeStatus::RUNNING;
   }
 
@@ -170,7 +167,6 @@ BT::NodeStatus Nav2NavigateToPose1::onRunning()
     "[Nav2NavigateToPose1] navigation finished with code %d",
     static_cast<int>(code));
 
-  // 4) 취소된 경우만 실패, 나머지는 성공 처리
   if (code == rclcpp_action::ResultCode::CANCELED)
   {
     RCLCPP_WARN(logger_, "[Nav2NavigateToPose1] navigation CANCELED");

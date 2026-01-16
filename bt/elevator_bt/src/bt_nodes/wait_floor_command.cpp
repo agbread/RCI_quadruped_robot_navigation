@@ -19,9 +19,8 @@ void WaitFloorCommand::ensureSubscription()
     return;
   }
 
-  // topic_name 포트에서 토픽 이름을 읽어옴
   if (!getInput("topic_name", topic_name_) || topic_name_.empty()) {
-    topic_name_ = "/elevator/floor_request";  // 기본값 (추측입니다)
+    topic_name_ = "/elevator/floor_request";  
   }
 
   sub_ = node_->create_subscription<Int32>(
@@ -44,7 +43,6 @@ BT::NodeStatus WaitFloorCommand::onStart()
 
 BT::NodeStatus WaitFloorCommand::onRunning()
 {
-  // 콜백 처리를 위해 spin_some
   exec_->spin_some();
 
   if (!got_msg_.load(std::memory_order_relaxed)) {
@@ -62,7 +60,6 @@ BT::NodeStatus WaitFloorCommand::onRunning()
 
 void WaitFloorCommand::onHalted()
 {
-  // 필요한 경우 상태 초기화
   got_msg_.store(false, std::memory_order_relaxed);
 }
 

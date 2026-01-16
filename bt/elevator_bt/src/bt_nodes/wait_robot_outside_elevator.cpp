@@ -79,7 +79,6 @@ BT::NodeStatus WaitRobotOutsideElevator::onRunning()
   const double cos_yaw = std::cos(yaw);
   const double sin_yaw = std::sin(yaw);
 
-  // --- 앞(front) / 뒤(rear) 포인트 ---
   const double front_x = x + cos_yaw * zones_.front_offset;
   const double front_y = y + sin_yaw * zones_.front_offset;
 
@@ -103,9 +102,7 @@ BT::NodeStatus WaitRobotOutsideElevator::onRunning()
   const bool front_in_cabin = in_cabin(front_x, front_y);
   const bool rear_in_cabin  = in_cabin(rear_x,  rear_y);
 
-  // ★ 핵심 변경:
-  //   "cabin 밖" 이기만 하면 SUCCESS 로 보고,
-  //   바로 다음 BT 노드(문 닫기 SetElevatorDoor 등)를 실행하게 함.
+
   const bool front_out_of_cabin = !front_in_cabin;
   const bool rear_out_of_cabin  = !rear_in_cabin;
 
@@ -122,7 +119,6 @@ BT::NodeStatus WaitRobotOutsideElevator::onRunning()
     return BT::NodeStatus::SUCCESS;
   }
 
-  // --- 이하 타임아웃 및 디버그 로그는 그대로 유지 ---
   const double elapsed = std::chrono::duration<double>(now - t0_).count();
   if (elapsed > timeout_)
   {

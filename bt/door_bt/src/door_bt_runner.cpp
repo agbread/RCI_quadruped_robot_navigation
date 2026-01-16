@@ -15,7 +15,6 @@ int main(int argc, char** argv)
   node->declare_parameter<std::string>("bt_xml_file", "bt_trees/tests/door_bt_RCI.xml");
   std::string tree_file = node->get_parameter("bt_xml_file").as_string();
 
-  // 상대 경로면 door_bt share 밑에서 찾기
   if (!tree_file.empty() && tree_file[0] != '/')
   {
     try
@@ -25,7 +24,6 @@ int main(int argc, char** argv)
     }
     catch (...)
     {
-      // 설치/소스 혼재 시 share를 못 찾을 수도 있음 (확실하지 않음)
     }
   }
 

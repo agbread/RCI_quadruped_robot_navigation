@@ -8,7 +8,7 @@
 
 namespace elevator_bt {
 
-class GetCabinGoal : public BT::SyncActionNode  // 단순 계산이므로 SyncAction (추측입니다)
+class GetCabinGoal : public BT::SyncActionNode  
 {
 public:
   GetCabinGoal(const std::string& name, const BT::NodeConfiguration& config);

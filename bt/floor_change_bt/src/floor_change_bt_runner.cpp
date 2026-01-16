@@ -26,7 +26,6 @@ int main(int argc, char ** argv)
 
   BT::BehaviorTreeFactory factory;
 
-  // (A) 우리 통합용 수동 분기 노드 등록
   factory.registerNodeType<floor_change_bt::WaitManualFloorRequest>("WaitManualFloorRequest");
   factory.registerNodeType<floor_change_bt::CheckStringEquals>("CheckStringEquals");
   factory.registerNodeType<floor_change_bt::GetCurrentFloor>("GetCurrentFloor");
@@ -34,7 +33,6 @@ int main(int argc, char ** argv)
   factory.registerNodeType<floor_change_bt::PublishInitialPoseFromTF>("PublishInitialPoseFromTF");
   factory.registerNodeType<floor_change_bt::SelectFloorConfig>("SelectFloorConfig");
 
-  // (B) stair / elevator 플러그인 로딩 (절대경로로 안정화)
   const auto stair_prefix = ament_index_cpp::get_package_prefix("stair_bt");
   const auto elev_prefix  = ament_index_cpp::get_package_prefix("elevator_bt");
 

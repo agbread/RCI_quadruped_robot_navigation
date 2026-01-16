@@ -14,11 +14,8 @@ PublishDoorYaml::PublishDoorYaml(const std::string& name, const BT::NodeConfigur
 BT::PortsList PublishDoorYaml::providedPorts()
 {
   return {
-    // 사용 예: yaml="config/L2.yaml"
     BT::InputPort<std::string>("yaml", "door yaml path to publish"),
-    // 필요시 토픽 변경 가능
     BT::InputPort<std::string>("topic", "/door_controller/config_yaml", "target topic"),
-    // (선택) frame/층번호 등을 넣고 싶으면 확장 가능
   };
 }
 
@@ -26,14 +23,12 @@ rclcpp::Node::SharedPtr PublishDoorYaml::getNodeFromBlackboardOrCreate()
 {
   if (config().blackboard)
   {
-    // 1) "node" 키 시도
     try
     {
       return config().blackboard->get<rclcpp::Node::SharedPtr>("node");
     }
     catch (...) {}
 
-    // 2) "ros_node" 키 시도
     try
     {
       return config().blackboard->get<rclcpp::Node::SharedPtr>("ros_node");
@@ -41,7 +36,6 @@ rclcpp::Node::SharedPtr PublishDoorYaml::getNodeFromBlackboardOrCreate()
     catch (...) {}
   }
 
-  // 없으면 내부 노드 생성
   return rclcpp::Node::make_shared("publish_door_yaml_bt_node");
 }
 
@@ -64,7 +58,6 @@ void PublishDoorYaml::ensurePublisher(const std::string& topic)
 
 BT::NodeStatus PublishDoorYaml::tick()
 {
-  // 입력값 읽기
   std::string yaml;
   if (!getInput("yaml", yaml) || yaml.empty())
   {
@@ -85,7 +78,6 @@ BT::NodeStatus PublishDoorYaml::tick()
     return BT::NodeStatus::FAILURE;
   }
 
-  // 같은 yaml이면 재발행하지 않음(반복 tick 방지)
   if (yaml == last_yaml_)
   {
     return BT::NodeStatus::SUCCESS;

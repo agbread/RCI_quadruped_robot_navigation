@@ -36,10 +36,8 @@ public:
 private:
   struct DoorDef
   {
-    std::string ns;  // /doors/L1_door_stair1
-    // path 교차용 선분
+    std::string ns;  
     double p1x{}, p1y{}, p2x{}, p2y{};
-    // 반경 판정용
     double cx{}, cy{}, radius{};
   };
 
@@ -53,12 +51,11 @@ private:
     rclcpp::Time last_pos_time;
   };
 
-  // ✅ 문별 런타임 상태 (동시 처리)
   struct DoorRuntime
   {
-    bool opening{false};   // open 확인 대기
-    bool opened{false};    // open 상태로 간주
-    bool closing{false};   // close 확인 대기
+    bool opening{false};   
+    bool opened{false};    
+    bool closing{false};   
 
     rclcpp::Time last_cmd_time;
     bool has_last_cmd{false};
@@ -78,7 +75,7 @@ private:
   std::mutex mtx_;
   nav_msgs::msg::Path::SharedPtr last_plan_;
 
-  // config (기본값은 멤버로)
+  // config 
   std::string plan_topic_{"/plan"};
   std::string world_frame_{"map"};
   std::string base_frame_{"base_link"};
@@ -87,7 +84,7 @@ private:
   std::string config_yaml_topic_{"/door_controller/config_yaml"};
   std::string enabled_topic_{"/door_controller/enabled"};
 
-  // enable gate (층 이동 등에서 오동작 방지)
+  // enable gate 
   bool enabled_{true};
 
   // YAML hot-reload
@@ -101,7 +98,7 @@ private:
   double feedback_timeout_s_{5.0};
   double cooldown_s_{1.0};
 
-  // YAML path (있으면 doors 문자열 대신 사용)
+  // YAML path 
   std::string doors_yaml_{""};
 
   // doors
@@ -111,10 +108,10 @@ private:
   std::unordered_map<std::string, DoorIO> io_;              // ns -> IO
   std::unordered_map<std::string, DoorRuntime> rt_;         // ns -> runtime
 
-  // plan 단위 처리 완료(한 plan에서 재처리 방지)
+
   std::unordered_set<std::string> processed_in_plan_;
 
-  // cooldown(문 닫은 직후)
+  // cooldown
   std::unordered_map<std::string, rclcpp::Time> done_time_; // ns -> last done time
 
   // plan change detect

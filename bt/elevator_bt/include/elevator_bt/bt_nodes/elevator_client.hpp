@@ -1,9 +1,9 @@
 #pragma once
 #include <rclcpp/rclcpp.hpp>
-#include <std_msgs/msg/int32.hpp>                 // 확실하지 않음: cmd_floor가 Int32라 가정
-#include <std_msgs/msg/float64.hpp>              // 확실하지 않음: cmd_z, cabin_z
-#include <std_msgs/msg/bool.hpp>                 // 확실하지 않음: door_open
-#include <std_msgs/msg/float64_multi_array.hpp>  // 확실: door_pos는 Float64MultiArray로 수신됨
+#include <std_msgs/msg/int32.hpp>                 
+#include <std_msgs/msg/float64.hpp>              
+#include <std_msgs/msg/bool.hpp>                 
+#include <std_msgs/msg/float64_multi_array.hpp>  
 #include <atomic>
 #include <mutex>
 #include <string>
@@ -16,20 +16,18 @@ class ElevatorClient {
 public:
   explicit ElevatorClient(const rclcpp::Node::SharedPtr& node);
 
-  // 네임스페이스 설정 및 모든 Pub/Sub 초기화
   void setNamespace(const std::string& ns);
 
-  // 명령(확실하지 않음: 메시지 타입 추정)
   void cmdFloor(int floor_idx);     // /<ns>/cmd_floor : std_msgs/Int32
   void cmdZ(double z_m);            // /<ns>/cmd_z     : std_msgs/Float64
   void setDoorOpen(bool open);      // /<ns>/door_open : std_msgs/Bool
 
   // 상태 조회
-  double cabinZ() const;                                // NaN이면 아직 미수신
-  std::vector<double> doorPos() const;                  // 비어있으면 아직 미수신
-  double doorOpenExtent() const;                        // |L|,|R| 평균. NaN이면 미수신
-  double doorA() const;                                 // 좌문(가정)
-  double doorB() const;                                 // 우문(가정)
+  double cabinZ() const;                                
+  std::vector<double> doorPos() const;                  
+  double doorOpenExtent() const;                        
+  double doorA() const;                                 
+  double doorB() const;                                 
 
 private:
   rclcpp::Node::SharedPtr node_;
@@ -50,7 +48,7 @@ private:
   std::atomic<double> door_b_{std::numeric_limits<double>::quiet_NaN()};
 
   mutable std::mutex mtx_door_vec_;
-  std::vector<double> door_vec_; // 원본 벡터도 보관(디버깅/필요 시)
+  std::vector<double> door_vec_; 
 };
 
 } // namespace elevator_bt

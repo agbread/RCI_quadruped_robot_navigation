@@ -34,27 +34,22 @@ public:
   }
 
 private:
-  // BT::StatefulActionNode 인터페이스
   BT::NodeStatus onStart() override;
   BT::NodeStatus onRunning() override;
   void onHalted() override;
 
-  // 기본 ROS 객체들
   rclcpp::Node::SharedPtr node_;
   rclcpp_action::Client<NavigateToPose>::SharedPtr action_client_;
   rclcpp::Logger logger_;
 
-  // Goal 진행 상태
   bool            goal_sent_{false};
   rclcpp::Time    goal_start_time_;
   rclcpp::Duration timeout_;
 
-  // 현재 진행 중인 goal handle
   GoalHandleNavigateToPose::SharedPtr current_goal_handle_;
 
-  // 목표 포즈 / 성공 반경
   geometry_msgs::msg::PoseStamped goal_pose_;
-  double success_radius_;   // 생성자에서 파라미터로 설정
+  double success_radius_;   
 
   // TF
   std::shared_ptr<tf2_ros::Buffer>           tf_buffer_;

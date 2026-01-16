@@ -25,7 +25,6 @@ DoorPlanController::DoorPlanController(const std::string& name,
 
 BT::PortsList DoorPlanController::providedPorts()
 {
-  // Humble BT v3 호환: 기본값은 멤버로 관리, Ports는 존재만 선언
   return {
     BT::InputPort<std::string>("doors", "legacy: inline doors string"),
     BT::InputPort<std::string>("doors_yaml", "YAML path (preferred). If set, overrides 'doors'"),
@@ -89,7 +88,7 @@ std::string DoorPlanController::resolvePathMaybeInShare(const std::string& path)
   }
   catch (...)
   {
-    return path; // 설치/소스 환경 혼재 시 (확실하지 않음)
+    return path; 
   }
 }
 
@@ -209,7 +208,6 @@ void DoorPlanController::ensureDoorIO(const DoorDef& d)
   DoorIO io;
   io.pub_cmd = node_->create_publisher<std_msgs::msg::Bool>(d.ns + "/door_open", 10);
 
-  // ✅ door_pos 타입: Float64MultiArray
   io.sub_pos = node_->create_subscription<std_msgs::msg::Float64MultiArray>(
     d.ns + "/door_pos", rclcpp::QoS(10),
     [this, ns=d.ns](const std_msgs::msg::Float64MultiArray::SharedPtr msg){
@@ -218,7 +216,6 @@ void DoorPlanController::ensureDoorIO(const DoorDef& d)
 
   io_[d.ns] = io;
 
-  // runtime map도 미리 준비
   rt_.try_emplace(d.ns, DoorRuntime{});
 
   RCLCPP_INFO(node_->get_logger(),
@@ -256,7 +253,6 @@ bool DoorPlanController::reloadDoorsIfRequested()
   doors_yaml_ = new_yaml;
   doors_ = std::move(new_doors);
 
-  // ensure IO + reset runtime (층 변경 시 상태를 초기화)
   for (const auto& d : doors_)
   {
     ensureDoorIO(d);
@@ -356,7 +352,6 @@ bool DoorPlanController::cooldownPassed(const std::string& ns) const
 
 void DoorPlanController::publishCmd(const std::string& ns, bool open)
 {
-  // 문별로 마지막 커맨드 기억해서 스팸 방지
   auto& rt = rt_[ns];
   if (rt.has_last_cmd && rt.last_cmd_open == open)
     return;
@@ -472,10 +467,8 @@ BT::NodeStatus DoorPlanController::onRunning()
 {
   rclcpp::spin_some(node_);
 
-  // YAML hot-reload (층 변경 시 topic으로 갱신)
   (void)reloadDoorsIfRequested();
 
-  // enable gate (엘리베이터/계단 이동 등에서 오동작 방지)
   if (!enabled_)
   {
     return BT::NodeStatus::RUNNING;
@@ -491,7 +484,6 @@ BT::NodeStatus DoorPlanController::onRunning()
   if (!getRobotXY(rx, ry))
     return BT::NodeStatus::RUNNING;
 
-  // plan 갱신 감지 → "이 plan에서 처리 완료" 목록만 초기화
   if (plan && plan->poses.size() >= 2)
   {
     if (plan->header.stamp != last_plan_stamp_ || plan->poses.size() != last_plan_size_)
@@ -502,23 +494,20 @@ BT::NodeStatus DoorPlanController::onRunning()
     }
   }
 
-  // ✅ 핵심: 모든 문을 매 tick 평가 (동시 open/close)
   for (const auto& d : doors_)
   {
     auto& rt = rt_[d.ns];
 
     const bool inside = inRadius(d, rx, ry);
 
-    // 1) 이미 opened/opening 상태인 문이 반경 밖으로 나가면 → close 시도
     if ((rt.opened || rt.opening) && !inside)
     {
       if (!rt.closing)
       {
-        // close 시작
         rt.closing = true;
-        rt.opening = false;  // open 확인 중이었어도 종료
-        rt.opened = true;    // close 완료 전까지는 열린 상태로 간주
-        rt.has_last_cmd = false; // close publish 허용
+        rt.opening = false;  
+        rt.opened = true;    
+        rt.has_last_cmd = false; 
       }
 
       if (!require_feedback_)
@@ -531,7 +520,6 @@ BT::NodeStatus DoorPlanController::onRunning()
         continue;
       }
 
-      // 피드백 기반 close
       if (doorClosed(d))
       {
         rt.opened = false;
@@ -541,10 +529,8 @@ BT::NodeStatus DoorPlanController::onRunning()
         continue;
       }
 
-      // 아직 닫힘 확인 안 됐으면 close publish (스팸은 rt.has_last_cmd로 방지)
       publishCmd(d.ns, false);
 
-      // timeout이면 “닫힘으로 간주” (닫힘 보장은 확실하지 않음)
       if ((node_->now() - rt.last_cmd_time).seconds() > feedback_timeout_s_)
       {
         rt.opened = false;
@@ -556,17 +542,14 @@ BT::NodeStatus DoorPlanController::onRunning()
       continue;
     }
 
-    // 2) 아직 처리 안 한 문 + plan에 포함 + 반경 안이면 → open 시도
     if (inside)
     {
       if (processed_in_plan_.count(d.ns)) continue;
       if (!cooldownPassed(d.ns)) continue;
 
-      // plan이 없거나 plan에 안 들어있으면 "열지 않음"
       if (!plan || plan->poses.size() < 2) continue;
       if (!pathUsesDoor(*plan, d)) continue;
 
-      // open 시작/유지
       if (!require_feedback_)
       {
         if (!rt.opened)
@@ -577,7 +560,6 @@ BT::NodeStatus DoorPlanController::onRunning()
         continue;
       }
 
-      // 피드백 기반 open
       if (doorOpened(d))
       {
         rt.opened = true;
@@ -586,17 +568,15 @@ BT::NodeStatus DoorPlanController::onRunning()
         continue;
       }
 
-      // 아직 open 확인 안 됐으면 open publish
       if (!rt.opened && !rt.opening)
       {
         rt.opening = true;
         rt.closing = false;
-        rt.has_last_cmd = false; // open publish 허용
+        rt.has_last_cmd = false; 
       }
 
       publishCmd(d.ns, true);
 
-      // timeout이면 “열림으로 간주”
       if ((node_->now() - rt.last_cmd_time).seconds() > feedback_timeout_s_)
       {
         rt.opened = true;
@@ -606,7 +586,6 @@ BT::NodeStatus DoorPlanController::onRunning()
       continue;
     }
 
-    // 3) inside=false이고 opened/opening도 아니면 아무것도 안 함
   }
 
   return BT::NodeStatus::RUNNING;

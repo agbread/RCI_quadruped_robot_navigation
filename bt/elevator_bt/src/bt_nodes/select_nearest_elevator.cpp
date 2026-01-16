@@ -26,11 +26,9 @@ SelectNearestElevator::SelectNearestElevator(
   tf_buffer_   = std::make_shared<tf2_ros::Buffer>(node_->get_clock());
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_, node_, true);
 
-  // executor (토픽 콜백 돌리려고)
   exec_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
   exec_->add_node(node_);
 
-  // /lift1/cabin_z 구독
   sub_lift1_z_ = node_->create_subscription<std_msgs::msg::Float64>(
     "/lift1/cabin_z", 10,
     [this](const std_msgs::msg::Float64::SharedPtr msg)
@@ -40,7 +38,6 @@ SelectNearestElevator::SelectNearestElevator(
       have_lift1_z_  = true;
     });
 
-  // /lift2/cabin_z 구독
   sub_lift2_z_ = node_->create_subscription<std_msgs::msg::Float64>(
     "/lift2/cabin_z", 10,
     [this](const std_msgs::msg::Float64::SharedPtr msg)
@@ -95,7 +92,6 @@ bool SelectNearestElevator::loadEntrance(const std::string & yaml_path,
     }
     out_info.ns = e["namespace"].as<std::string>();
 
-    // 층 기본 z (fallback용, 실제 선택은 cabin_z로 함)
     if (!e["floor_heights_m"] || !e["floor_heights_m"].IsSequence())
     {
       RCLCPP_ERROR(node_->get_logger(),
@@ -113,7 +109,6 @@ bool SelectNearestElevator::loadEntrance(const std::string & yaml_path,
     }
     out_info.z = heights[floor_idx].as<double>();
 
-    // entrances[floor_idx]에서 x, y 읽기
     if (!e["entrances"])
     {
       RCLCPP_ERROR(node_->get_logger(),
@@ -152,7 +147,6 @@ bool SelectNearestElevator::loadEntrance(const std::string & yaml_path,
     out_info.x = ent["x"].as<double>();
     out_info.y = ent["y"].as<double>();
 
-    // zones.cabin_* 기준으로 yaw 계산 (없으면 0)
     if (y["zones"] && y["zones"]["cabin_min"] && y["zones"]["cabin_max"])
     {
       auto cabin_min = y["zones"]["cabin_min"];
@@ -193,10 +187,8 @@ BT::NodeStatus SelectNearestElevator::tick()
 
   using namespace std::chrono_literals;
 
-  // ★ cabin_z 콜백 처리
   exec_->spin_some(0ms);
 
-  // cabin_z 값을 안전하게 읽기
   double cabin_z1 = 0.0, cabin_z2 = 0.0;
   bool have1 = false, have2 = false;
   {
@@ -213,11 +205,9 @@ BT::NodeStatus SelectNearestElevator::tick()
       node_->get_logger(), *node_->get_clock(), 2000,
       "[SelectNearestElevator] waiting cabin_z topics: lift1=%d lift2=%d",
       have1, have2);
-    // 아직 둘 중 하나라도 안 들어왔으면 다음 tick에서 다시 시도
     return BT::NodeStatus::RUNNING;
   }
 
-  // --- 입력 읽기 ---
   std::string world_frame = "map";
   std::string base_frame  = "base_link";
   getInput("world_frame", world_frame);
@@ -239,7 +229,6 @@ BT::NodeStatus SelectNearestElevator::tick()
     return BT::NodeStatus::FAILURE;
   }
 
-  // --- 현재 로봇 위치(world->base_link) ---
   geometry_msgs::msg::TransformStamped tf;
   try
   {
@@ -257,32 +246,26 @@ BT::NodeStatus SelectNearestElevator::tick()
   const double ry = tf.transform.translation.y;
   const double rz = tf.transform.translation.z;
 
-  // --- YAML에서 입구 좌표 읽기 ---
   EntranceInfo e1, e2;
   if (!loadEntrance(lift1_yaml, current_floor, e1) ||
       !loadEntrance(lift2_yaml, current_floor, e2))
   {
-    // 에러는 loadEntrance에서 로그 찍음
     return BT::NodeStatus::FAILURE;
   }
 
-  // xy 거리
   const double dxy1 = std::hypot(e1.x - rx, e1.y - ry);
   const double dxy2 = std::hypot(e2.x - rx, e2.y - ry);
 
-  // z 차이 (로봇 z vs cabin_z)
   const double dz1 = std::fabs(cabin_z1 - rz);
   const double dz2 = std::fabs(cabin_z2 - rz);
 
-  // 임계값 (필요하면 상수 조정)
-  const double dz_eps  = 0.20;  // z 차이가 이 정도 이상 나면 "다른 층"이라고 봄
-  const double dxy_eps = 0.05;  // xy 거의 비슷하다고 보는 오차
+  const double dz_eps  = 0.20;  
+  const double dxy_eps = 0.05;  
 
   const EntranceInfo * chosen = nullptr;
   std::string chosen_ns;
   double chosen_cabin_z = 0.0;
 
-  // 1) z 차이가 충분히 나면 -> 로봇 z와 더 가까운 cabin_z 선택
   if (dz1 + dz_eps < dz2)
   {
     chosen         = &e1;
@@ -297,7 +280,6 @@ BT::NodeStatus SelectNearestElevator::tick()
   }
   else
   {
-    // 2) 둘 다 거의 같은 층이면 -> XY 거리로 선택
     if (dxy1 <= dxy2 + dxy_eps)
     {
       chosen         = &e1;
@@ -318,7 +300,6 @@ BT::NodeStatus SelectNearestElevator::tick()
     return BT::NodeStatus::FAILURE;
   }
 
-  // --- 출력 포트 세팅 ---
   setOutput("elev_yaml", chosen->yaml_path);
   setOutput("elevator_ns", chosen_ns);
 
@@ -327,8 +308,7 @@ BT::NodeStatus SelectNearestElevator::tick()
   entrance_pose.header.stamp    = node_->get_clock()->now();
   entrance_pose.pose.position.x = chosen->x;
   entrance_pose.pose.position.y = chosen->y;
-  // z는 nav2 입장에서는 크게 안 중요하지만, cabin_z로 맞추고 싶다면:
-  entrance_pose.pose.position.z = chosen_cabin_z;  // 또는 chosen->z 써도 됨
+  entrance_pose.pose.position.z = chosen_cabin_z;  
 
   tf2::Quaternion q;
   q.setRPY(0.0, 0.0, chosen->yaw);

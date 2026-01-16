@@ -37,10 +37,8 @@ BT::NodeStatus WaitDoorOpen::onStart()
     return BT::NodeStatus::FAILURE;
   }
 
-  // ★ 추가: open_threshold 포트에서 값 읽기
   getInput<double>("open_threshold", threshold_);
 
-  // timeout도 포트에서 덮어쓰기 가능(있으면)
   getInput<double>("timeout", timeout_);
 
   std::string ns_cfg;
@@ -69,7 +67,6 @@ BT::NodeStatus WaitDoorOpen::onRunning()
     return BT::NodeStatus::FAILURE;
   }
 
-  // elevator_client의 doorOpenExtent(): |a| + |b|
   const double extent = client_.doorOpenExtent();
   
   const bool condition_met = want_open_ ? (extent >= threshold_)
@@ -102,7 +99,6 @@ BT::NodeStatus WaitDoorOpen::onRunning()
 }
 void WaitDoorOpen::onHalted()
 {
-  // 필요 시 정리 로직 추가 가능
 }
 
 } // namespace elevator_bt

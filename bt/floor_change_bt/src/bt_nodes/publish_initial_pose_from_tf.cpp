@@ -35,7 +35,6 @@ rclcpp::Node::SharedPtr PublishInitialPoseFromTF::getNodeFromBlackboardOrCreate(
 {
   if (config().blackboard)
   {
-    // 키가 프로젝트마다 다를 수 있으니 두 개 정도 시도
     try { return config().blackboard->get<rclcpp::Node::SharedPtr>("node"); } catch (...) {}
     try { return config().blackboard->get<rclcpp::Node::SharedPtr>("ros_node"); } catch (...) {}
   }
@@ -61,10 +60,8 @@ BT::NodeStatus PublishInitialPoseFromTF::onStart()
   published_ = 0;
   next_pub_time_ = node_->now();
 
-  // 첫 publish 시도
   if (!publishOnce())
   {
-    // TF가 아직 준비 안 됐을 수 있음 → RUNNING으로 재시도
     return BT::NodeStatus::RUNNING;
   }
 
@@ -72,7 +69,6 @@ BT::NodeStatus PublishInitialPoseFromTF::onStart()
   next_pub_time_ = node_->now() + rclcpp::Duration::from_nanoseconds(
     static_cast<int64_t>(publish_period_ms_) * 1000LL * 1000LL);
 
-  // 더 발행해야 하면 RUNNING
   return (published_ >= publish_times_) ? BT::NodeStatus::SUCCESS
                                        : BT::NodeStatus::RUNNING;
 }
@@ -89,7 +85,6 @@ BT::NodeStatus PublishInitialPoseFromTF::onRunning()
 
   if (!publishOnce())
   {
-    // TF가 계속 없으면 여기서 계속 RUNNING (필요하면 timeout 추가 가능)
     return BT::NodeStatus::RUNNING;
   }
 
@@ -111,12 +106,10 @@ bool PublishInitialPoseFromTF::publishOnce()
   geometry_msgs::msg::TransformStamped tf;
   try
   {
-    // map_frame_ -> base_frame_ 를 읽어 initialpose로 사용
     tf = tf_buffer_->lookupTransform(map_frame_, base_frame_, tf2::TimePointZero);
   }
   catch (const tf2::TransformException&)
   {
-    // TF가 아직 안 떠있으면 false
     return false;
   }
 
@@ -130,7 +123,6 @@ bool PublishInitialPoseFromTF::publishOnce()
 
   msg.pose.pose.orientation = tf.transform.rotation;
 
-  // covariance 설정: x,y,yaw만 의미 있게 주고 나머지는 큰 값
   for (auto & v : msg.pose.covariance) v = 0.0;
   msg.pose.covariance[0]  = cov_xy_;   // x
   msg.pose.covariance[7]  = cov_xy_;   // y
