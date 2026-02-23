@@ -349,8 +349,8 @@ This example demonstrates how to control the robot's movement using keyboard com
   agbread/my_ros2_gz11:latest \
   bash
   ```
----
-  ### Verify X11 environment variables (required for GUI applications)
+  
+  **Verify X11 environment variables (required for GUI applications)**
   ```bash
   echo $DISPLAY
   echo ${XAUTHORITY:-$HOME/.Xauthority}
