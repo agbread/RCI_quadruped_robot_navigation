@@ -327,6 +327,35 @@ This example demonstrates how to control the robot's movement using keyboard com
     (csuite) quit
     ```
 
+## Docker
+1. **Pull docker image**
+  ```bash
+  docker pull agbread/my_ros2_gz11:latest
+  ```
+2. **Run Docker container (GPU + Gazebo GUI)**
+  ```bash
+  docker run -it \
+  --gpus all \
+  --network host \
+  --ipc host \
+  -e NVIDIA_VISIBLE_DEVICES=all \
+  -e NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics,display \
+  -e DISPLAY=$DISPLAY \
+  -e XAUTHORITY=$XAUTHORITY \
+  -e QT_X11_NO_MITSHM=1 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+  -v $XAUTHORITY:$XAUTHORITY:ro \
+  --name gz11_gui \
+  agbread/my_ros2_gz11:latest \
+  bash
+  ```
+---
+  ### Verify X11 environment variables (required for GUI applications)
+  ```bash
+  echo $DISPLAY
+  echo ${XAUTHORITY:-$HOME/.Xauthority}
+  ```
+
 ## TodoList 
 
 1. **Navigation integration**  
