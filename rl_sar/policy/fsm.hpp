@@ -7,6 +7,7 @@
 #define FSM_HPP
 
 #include "a1/fsm.hpp"
+#include "a2/fsm.hpp"
 #include "b2/fsm.hpp"
 #include "b2w/fsm.hpp"
 #include "g1/fsm.hpp"

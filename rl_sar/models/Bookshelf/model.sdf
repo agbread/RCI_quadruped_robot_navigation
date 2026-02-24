@@ -29,7 +29,7 @@
                     <!-- PBR for Ignition, material scripts for gazebo classic-->
                     <pbr>
                         <metal>
-                            <albedo_map>https://fuel.gazebosim.org/1.0/openrobotics/models/bookshelf/4/files/bookshelf_diffuse.jpg</albedo_map>
+                            <albedo_map>model://Bookshelf/bookshelf_diffuse.jpg</albedo_map>
                         </metal>
                     </pbr>
                 </material>
@@ -58,7 +58,7 @@
                     <!-- PBR for Ignition, material scripts for gazebo classic-->
                     <pbr>
                         <metal>
-                            <albedo_map>https://fuel.gazebosim.org/1.0/openrobotics/models/bookshelf/4/files/bookshelf_diffuse.jpg</albedo_map>
+                            <albedo_map>model://Bookshelf/bookshelf_diffuse.jpg</albedo_map>
                         </metal>
                     </pbr>
                 </material>
@@ -87,7 +87,7 @@
                     <!-- PBR for Ignition, material scripts for gazebo classic-->
                     <pbr>
                         <metal>
-                            <albedo_map>https://fuel.gazebosim.org/1.0/openrobotics/models/bookshelf/4/files/bookshelf_diffuse.jpg</albedo_map>
+                            <albedo_map>model://Bookshelf/bookshelf_diffuse.jpg</albedo_map>
                         </metal>
                     </pbr>
                 </material>
@@ -116,7 +116,7 @@
                     <!-- PBR for Ignition, material scripts for gazebo classic-->
                     <pbr>
                         <metal>
-                            <albedo_map>https://fuel.gazebosim.org/1.0/openrobotics/models/bookshelf/4/files/bookshelf_diffuse.jpg</albedo_map>
+                            <albedo_map>model://Bookshelf/bookshelf_diffuse.jpg</albedo_map>
                         </metal>
                     </pbr>
                 </material>
@@ -145,7 +145,7 @@
                     <!-- PBR for Ignition, material scripts for gazebo classic-->
                     <pbr>
                         <metal>
-                            <albedo_map>https://fuel.gazebosim.org/1.0/openrobotics/models/bookshelf/4/files/bookshelf_diffuse.jpg</albedo_map>
+                            <albedo_map>model://Bookshelf/bookshelf_diffuse.jpg</albedo_map>
                         </metal>
                     </pbr>
                 </material>
@@ -174,7 +174,7 @@
                     <!-- PBR for Ignition, material scripts for gazebo classic-->
                     <pbr>
                         <metal>
-                            <albedo_map>https://fuel.gazebosim.org/1.0/openrobotics/models/bookshelf/4/files/bookshelf_diffuse.jpg</albedo_map>
+                            <albedo_map>model://Bookshelf/bookshelf_diffuse.jpg</albedo_map>
                         </metal>
                     </pbr>
                 </material>
@@ -203,7 +203,7 @@
                     <!-- PBR for Ignition, material scripts for gazebo classic-->
                     <pbr>
                         <metal>
-                            <albedo_map>https://fuel.gazebosim.org/1.0/openrobotics/models/bookshelf/4/files/bookshelf_diffuse.jpg</albedo_map>
+                            <albedo_map>model://Bookshelf/bookshelf_diffuse.jpg</albedo_map>
                         </metal>
                     </pbr>
                 </material>

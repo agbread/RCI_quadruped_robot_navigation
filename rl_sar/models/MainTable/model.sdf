@@ -7,14 +7,14 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/maintable/2/files/meshes/MainTable.obj</uri>
+                        <uri>model://MainTable/meshes/MainTable.obj</uri>
                     </mesh>
                 </geometry>
             </visual>
             <collision name="collision">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/maintable/2/files/meshes/MainTable.obj</uri>
+                        <uri>model://MainTable/meshes/MainTable.obj</uri>
                     </mesh>
                 </geometry>
             </collision>

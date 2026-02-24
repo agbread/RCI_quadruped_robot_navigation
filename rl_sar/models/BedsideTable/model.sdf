@@ -6,14 +6,14 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/bedsidetable/2/files/meshes/BedsideTable.obj</uri>
+                        <uri>model://BedsideTable/meshes/BedsideTable.obj</uri>
                     </mesh>
                 </geometry>
             </visual>
             <collision name="collision">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/bedsidetable/2/files/meshes/BedsideTable_Col.obj</uri>
+                        <uri>model://BedsideTable/meshes/BedsideTable_Col.obj</uri>
                     </mesh>
                 </geometry>
             </collision>

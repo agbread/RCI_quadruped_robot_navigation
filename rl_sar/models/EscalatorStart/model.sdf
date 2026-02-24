@@ -7,14 +7,14 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/escalatorstart/3/files/meshes/EscalatorStart.obj</uri>
+                        <uri>model://EscalatorStart/meshes/EscalatorStart.obj</uri>
                     </mesh>
                 </geometry>
             </visual>
             <collision name="collision">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/escalatorstart/3/files/meshes/EscalatorStart_Col.obj</uri>
+                        <uri>model://EscalatorStart/meshes/EscalatorStart_Col.obj</uri>
                     </mesh>
                 </geometry>
             </collision>

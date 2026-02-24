@@ -16,7 +16,7 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/deskchair/2/files/meshes/DeskChair.obj</uri>
+                        <uri>model://DeskChair/meshes/DeskChair.obj</uri>
                         <scale>0.010 0.010 0.010</scale>
                     </mesh>
                 </geometry>

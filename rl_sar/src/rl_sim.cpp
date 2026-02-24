@@ -13,7 +13,8 @@ RL_Sim::RL_Sim() : rclcpp::Node("rl_sim_node")
     param_client = this->create_client<rcl_interfaces::srv::GetParameters>("/param_node/get_parameters");
     while (!param_client->wait_for_service(std::chrono::seconds(1)))
     {
-        if (!rclcpp::ok()) {
+        if (!rclcpp::ok())
+        {
             std::cout << LOGGER::ERROR << "Interrupted while waiting for param_node service. Exiting." << std::endl;
             return;
         }
@@ -79,19 +80,19 @@ RL_Sim::RL_Sim() : rclcpp::Node("rl_sim_node")
     // subscriber
     this->cmd_vel_subscriber = this->create_subscription<geometry_msgs::msg::Twist>(
         "/cmd_vel", rclcpp::SystemDefaultsQoS(),
-        [this] (const geometry_msgs::msg::Twist::SharedPtr msg) {this->CmdvelCallback(msg);}
-    );
+        [this](const geometry_msgs::msg::Twist::SharedPtr msg)
+        { this->CmdvelCallback(msg); });
     this->joy_subscriber = this->create_subscription<sensor_msgs::msg::Joy>(
         "/joy", rclcpp::SystemDefaultsQoS(),
-        [this] (const sensor_msgs::msg::Joy::SharedPtr msg) {this->JoyCallback(msg);}
-    );
+        [this](const sensor_msgs::msg::Joy::SharedPtr msg)
+        { this->JoyCallback(msg); });
     this->gazebo_imu_subscriber = this->create_subscription<sensor_msgs::msg::Imu>(
-        "/imu", rclcpp::SystemDefaultsQoS(), [this] (const sensor_msgs::msg::Imu::SharedPtr msg) {this->GazeboImuCallback(msg);}
-    );
+        "/imu", rclcpp::SystemDefaultsQoS(), [this](const sensor_msgs::msg::Imu::SharedPtr msg)
+        { this->GazeboImuCallback(msg); });
     this->robot_state_subscriber = this->create_subscription<robot_msgs::msg::RobotState>(
         this->ros_namespace + "robot_joint_controller/state", rclcpp::SystemDefaultsQoS(),
-        [this] (const robot_msgs::msg::RobotState::SharedPtr msg) {this->RobotStateCallback(msg);}
-    );
+        [this](const robot_msgs::msg::RobotState::SharedPtr msg)
+        { this->RobotStateCallback(msg); });
 
     // service
     this->gazebo_pause_physics_client = this->create_client<std_srvs::srv::Empty>("/pause_physics");
@@ -110,7 +111,7 @@ RL_Sim::RL_Sim() : rclcpp::Node("rl_sim_node")
     // keyboard
     this->loop_keyboard = std::make_shared<LoopFunc>("loop_keyboard", 0.05, std::bind(&RL_Sim::KeyboardInterface, this));
     this->loop_keyboard->start();
-    
+
     // here
     // action server
     using namespace std::placeholders;
@@ -120,7 +121,7 @@ RL_Sim::RL_Sim() : rclcpp::Node("rl_sim_node")
         std::bind(&RL_Sim::handle_goal_activation, this, _1, _2),
         std::bind(&RL_Sim::handle_cancel_activation, this, _1),
         std::bind(&RL_Sim::handle_accepted_activation, this, _1));
-    
+
     this->locomotion_mode_server_ = rclcpp_action::create_server<SetLocomotionMode>(
         this,
         "set_locomotion_mode",
@@ -141,8 +142,14 @@ RL_Sim::RL_Sim() : rclcpp::Node("rl_sim_node")
     this->plot_t = std::vector<int>(this->plot_size, 0);
     this->plot_real_joint_pos.resize(this->params.num_of_dofs);
     this->plot_target_joint_pos.resize(this->params.num_of_dofs);
-    for (auto &vector : this->plot_real_joint_pos) { vector = std::vector<double>(this->plot_size, 0); }
-    for (auto &vector : this->plot_target_joint_pos) { vector = std::vector<double>(this->plot_size, 0); }
+    for (auto &vector : this->plot_real_joint_pos)
+    {
+        vector = std::vector<double>(this->plot_size, 0);
+    }
+    for (auto &vector : this->plot_target_joint_pos)
+    {
+        vector = std::vector<double>(this->plot_size, 0);
+    }
     this->loop_plot = std::make_shared<LoopFunc>("loop_plot", 0.001, std::bind(&RL_Sim::Plot, this));
     this->loop_plot->start();
 #endif
@@ -167,7 +174,7 @@ RL_Sim::~RL_Sim()
 // here
 // RobotActivation Action Server
 rclcpp_action::GoalResponse RL_Sim::handle_goal_activation(
-    const rclcpp_action::GoalUUID & uuid,
+    const rclcpp_action::GoalUUID &uuid,
     std::shared_ptr<const RobotActivation::Goal> goal)
 {
     RCLCPP_INFO(this->get_logger(), "Received goal request for RobotActivation");
@@ -205,10 +212,11 @@ void RL_Sim::execute_activation(
         feedback->status = "Activating robot";
         goal_handle->publish_feedback(feedback);
         this->control.SetKeyboard(Input::Keyboard::Num0);
-        
+
         rclcpp::sleep_for(std::chrono::milliseconds(500));
 
-        if (!goal_handle->is_active() || goal_handle->is_canceling()) {
+        if (!goal_handle->is_active() || goal_handle->is_canceling())
+        {
             result->success = false;
             result->message = "Goal canceled";
             goal_handle->canceled(result);
@@ -220,7 +228,7 @@ void RL_Sim::execute_activation(
         feedback->status = "Setting default walking mode";
         goal_handle->publish_feedback(feedback);
         this->control.SetKeyboard(Input::Keyboard::Num1);
-        
+
         rclcpp::sleep_for(std::chrono::milliseconds(100));
 
         result->success = true;
@@ -247,12 +255,13 @@ void RL_Sim::execute_activation(
 
 // SetLocomotionMode Action Server
 rclcpp_action::GoalResponse RL_Sim::handle_goal_locomotion_mode(
-    const rclcpp_action::GoalUUID & uuid,
+    const rclcpp_action::GoalUUID &uuid,
     std::shared_ptr<const SetLocomotionMode::Goal> goal)
 {
     RCLCPP_INFO(this->get_logger(), "Received goal request for SetLocomotionMode with mode %d", goal->mode);
     (void)uuid;
-    if (goal->mode < 1 || goal->mode > 8) {
+    if (goal->mode < 1 || goal->mode > 8)
+    {
         RCLCPP_ERROR(this->get_logger(), "Invalid locomotion mode. Must be between 1 and 8.");
         return rclcpp_action::GoalResponse::REJECT;
     }
@@ -280,7 +289,7 @@ void RL_Sim::execute_locomotion_mode(
     RCLCPP_INFO(this->get_logger(), "Executing goal for SetLocomotionMode");
     const auto goal = goal_handle->get_goal();
     auto result = std::make_shared<SetLocomotionMode::Result>();
-    
+
     RCLCPP_INFO(this->get_logger(), "Action Server: Set Locomotion Mode to %d request received.", goal->mode);
     Input::Keyboard key = static_cast<Input::Keyboard>(static_cast<int>(Input::Keyboard::Num1) + goal->mode - 1);
     this->control.SetKeyboard(key);
@@ -295,7 +304,7 @@ void RL_Sim::execute_locomotion_mode(
 
 // SetNavigationMode Action Server
 rclcpp_action::GoalResponse RL_Sim::handle_goal_navigation_mode(
-    const rclcpp_action::GoalUUID & uuid,
+    const rclcpp_action::GoalUUID &uuid,
     std::shared_ptr<const SetNavigationMode::Goal> goal)
 {
     RCLCPP_INFO(this->get_logger(), "Received goal request for SetNavigationMode");
@@ -335,7 +344,7 @@ void RL_Sim::execute_navigation_mode(
     {
         result->message = "Navigation mode is already " + std::string(goal->enable ? "ON" : "OFF");
     }
-    
+
     rclcpp::sleep_for(std::chrono::milliseconds(100));
 
     result->success = true;
@@ -344,10 +353,9 @@ void RL_Sim::execute_navigation_mode(
 }
 // here
 
-
-void RL_Sim::StartJointController(const std::string& ros_namespace, const std::vector<std::string>& names)
+void RL_Sim::StartJointController(const std::string &ros_namespace, const std::vector<std::string> &names)
 {
-    const char* ros_distro = std::getenv("ROS_DISTRO");
+    const char *ros_distro = std::getenv("ROS_DISTRO");
     std::string spawner = (ros_distro && std::string(ros_distro) == "foxy") ? "spawner.py" : "spawner";
 
     std::filesystem::path tmp_path = std::filesystem::temp_directory_path() / "robot_joint_controller_params.yaml";
@@ -361,7 +369,7 @@ void RL_Sim::StartJointController(const std::string& ros_namespace, const std::v
         tmp_file << "/robot_joint_controller:\n";
         tmp_file << "    ros__parameters:\n";
         tmp_file << "        joints:\n";
-        for (const auto& name : names)
+        for (const auto &name : names)
         {
             tmp_file << "            - " << name << "\n";
         }
@@ -393,7 +401,6 @@ void RL_Sim::StartJointController(const std::string& ros_namespace, const std::v
         throw std::runtime_error("fork() failed");
     }
 }
-
 
 void RL_Sim::GetState(RobotState<double> *state)
 {
@@ -445,13 +452,15 @@ void RL_Sim::RobotControl()
         {
             auto empty_request = std::make_shared<std_srvs::srv::Empty::Request>();
             auto result = this->gazebo_pause_physics_client->async_send_request(empty_request);
-            std::cout << std::endl << LOGGER::INFO << "Simulation Stop" << std::endl;
+            std::cout << std::endl
+                      << LOGGER::INFO << "Simulation Stop" << std::endl;
         }
         else
         {
             auto empty_request = std::make_shared<std_srvs::srv::Empty::Request>();
             auto result = this->gazebo_unpause_physics_client->async_send_request(empty_request);
-            std::cout << std::endl << LOGGER::INFO << "Simulation Start" << std::endl;
+            std::cout << std::endl
+                      << LOGGER::INFO << "Simulation Start" << std::endl;
         }
         simulation_running = !simulation_running;
         this->control.current_keyboard = this->control.last_keyboard;
@@ -497,12 +506,14 @@ void RL_Sim::RobotControl()
             this->control.y = 0;
             this->control.yaw = 0;
             this->control.current_keyboard = this->control.last_keyboard;
-            std::cout << std::endl << LOGGER::INFO << "Space " << std::endl;
+            std::cout << std::endl
+                      << LOGGER::INFO << "Space " << std::endl;
         }
         if (this->control.current_keyboard == Input::Keyboard::N || this->control.current_gamepad == Input::Gamepad::X)
         {
             this->control.navigation_mode = !this->control.navigation_mode;
-            std::cout << std::endl << LOGGER::INFO << "Navigation mode: " << (this->control.navigation_mode ? "ON" : "OFF") << std::endl;
+            std::cout << std::endl
+                      << LOGGER::INFO << "Navigation mode: " << (this->control.navigation_mode ? "ON" : "OFF") << std::endl;
             this->control.current_keyboard = this->control.last_keyboard;
         }
 
@@ -531,42 +542,75 @@ void RL_Sim::JoyCallback(const sensor_msgs::msg::Joy::SharedPtr msg)
     // |__ buttons[]: A=0, B=1, X=2, Y=3, LB=4, RB=5, back=6, start=7, power=8, stickL=9, stickR=10
     // |__ axes[]: Lx=0, Ly=1, Rx=3, Ry=4, LT=2, RT=5, DPadX=6, DPadY=7
 
-    if (this->joy_msg.buttons[0]) this->control.SetGamepad(Input::Gamepad::A);
-    if (this->joy_msg.buttons[1]) this->control.SetGamepad(Input::Gamepad::B);
-    if (this->joy_msg.buttons[2]) this->control.SetGamepad(Input::Gamepad::X);
-    if (this->joy_msg.buttons[3]) this->control.SetGamepad(Input::Gamepad::Y);
-    if (this->joy_msg.buttons[4]) this->control.SetGamepad(Input::Gamepad::LB);
-    if (this->joy_msg.buttons[5]) this->control.SetGamepad(Input::Gamepad::RB);
-    if (this->joy_msg.buttons[9]) this->control.SetGamepad(Input::Gamepad::LStick);
-    if (this->joy_msg.buttons[10]) this->control.SetGamepad(Input::Gamepad::RStick);
-    if (this->joy_msg.axes[7] > 0) this->control.SetGamepad(Input::Gamepad::DPadUp);
-    if (this->joy_msg.axes[7] < 0) this->control.SetGamepad(Input::Gamepad::DPadDown);
-    if (this->joy_msg.axes[6] < 0) this->control.SetGamepad(Input::Gamepad::DPadLeft);
-    if (this->joy_msg.axes[6] > 0) this->control.SetGamepad(Input::Gamepad::DPadRight);
-    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[0]) this->control.SetGamepad(Input::Gamepad::LB_A);
-    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[1]) this->control.SetGamepad(Input::Gamepad::LB_B);
-    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[2]) this->control.SetGamepad(Input::Gamepad::LB_X);
-    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[3]) this->control.SetGamepad(Input::Gamepad::LB_Y);
-    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[9]) this->control.SetGamepad(Input::Gamepad::LB_LStick);
-    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[10]) this->control.SetGamepad(Input::Gamepad::LB_RStick);
-    if (this->joy_msg.buttons[4] && this->joy_msg.axes[7] > 0) this->control.SetGamepad(Input::Gamepad::LB_DPadUp);
-    if (this->joy_msg.buttons[4] && this->joy_msg.axes[7] < 0) this->control.SetGamepad(Input::Gamepad::LB_DPadDown);
-    if (this->joy_msg.buttons[4] && this->joy_msg.axes[6] > 0) this->control.SetGamepad(Input::Gamepad::LB_DPadRight);
-    if (this->joy_msg.buttons[4] && this->joy_msg.axes[6] < 0) this->control.SetGamepad(Input::Gamepad::LB_DPadLeft);
-    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[0]) this->control.SetGamepad(Input::Gamepad::RB_A);
-    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[1]) this->control.SetGamepad(Input::Gamepad::RB_B);
-    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[2]) this->control.SetGamepad(Input::Gamepad::RB_X);
-    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[3]) this->control.SetGamepad(Input::Gamepad::RB_Y);
-    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[9]) this->control.SetGamepad(Input::Gamepad::RB_LStick);
-    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[10]) this->control.SetGamepad(Input::Gamepad::RB_RStick);
-    if (this->joy_msg.buttons[5] && this->joy_msg.axes[7] > 0) this->control.SetGamepad(Input::Gamepad::RB_DPadUp);
-    if (this->joy_msg.buttons[5] && this->joy_msg.axes[7] < 0) this->control.SetGamepad(Input::Gamepad::RB_DPadDown);
-    if (this->joy_msg.buttons[5] && this->joy_msg.axes[6] > 0) this->control.SetGamepad(Input::Gamepad::RB_DPadRight);
-    if (this->joy_msg.buttons[5] && this->joy_msg.axes[6] < 0) this->control.SetGamepad(Input::Gamepad::RB_DPadLeft);
-    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[5]) this->control.SetGamepad(Input::Gamepad::LB_RB);
+    if (this->joy_msg.buttons[0])
+        this->control.SetGamepad(Input::Gamepad::A);
+    if (this->joy_msg.buttons[1])
+        this->control.SetGamepad(Input::Gamepad::B);
+    if (this->joy_msg.buttons[2])
+        this->control.SetGamepad(Input::Gamepad::X);
+    if (this->joy_msg.buttons[3])
+        this->control.SetGamepad(Input::Gamepad::Y);
+    if (this->joy_msg.buttons[4])
+        this->control.SetGamepad(Input::Gamepad::LB);
+    if (this->joy_msg.buttons[5])
+        this->control.SetGamepad(Input::Gamepad::RB);
+    if (this->joy_msg.buttons[9])
+        this->control.SetGamepad(Input::Gamepad::LStick);
+    if (this->joy_msg.buttons[10])
+        this->control.SetGamepad(Input::Gamepad::RStick);
+    if (this->joy_msg.axes[7] > 0)
+        this->control.SetGamepad(Input::Gamepad::DPadUp);
+    if (this->joy_msg.axes[7] < 0)
+        this->control.SetGamepad(Input::Gamepad::DPadDown);
+    if (this->joy_msg.axes[6] < 0)
+        this->control.SetGamepad(Input::Gamepad::DPadLeft);
+    if (this->joy_msg.axes[6] > 0)
+        this->control.SetGamepad(Input::Gamepad::DPadRight);
+    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[0])
+        this->control.SetGamepad(Input::Gamepad::LB_A);
+    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[1])
+        this->control.SetGamepad(Input::Gamepad::LB_B);
+    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[2])
+        this->control.SetGamepad(Input::Gamepad::LB_X);
+    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[3])
+        this->control.SetGamepad(Input::Gamepad::LB_Y);
+    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[9])
+        this->control.SetGamepad(Input::Gamepad::LB_LStick);
+    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[10])
+        this->control.SetGamepad(Input::Gamepad::LB_RStick);
+    if (this->joy_msg.buttons[4] && this->joy_msg.axes[7] > 0)
+        this->control.SetGamepad(Input::Gamepad::LB_DPadUp);
+    if (this->joy_msg.buttons[4] && this->joy_msg.axes[7] < 0)
+        this->control.SetGamepad(Input::Gamepad::LB_DPadDown);
+    if (this->joy_msg.buttons[4] && this->joy_msg.axes[6] > 0)
+        this->control.SetGamepad(Input::Gamepad::LB_DPadRight);
+    if (this->joy_msg.buttons[4] && this->joy_msg.axes[6] < 0)
+        this->control.SetGamepad(Input::Gamepad::LB_DPadLeft);
+    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[0])
+        this->control.SetGamepad(Input::Gamepad::RB_A);
+    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[1])
+        this->control.SetGamepad(Input::Gamepad::RB_B);
+    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[2])
+        this->control.SetGamepad(Input::Gamepad::RB_X);
+    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[3])
+        this->control.SetGamepad(Input::Gamepad::RB_Y);
+    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[9])
+        this->control.SetGamepad(Input::Gamepad::RB_LStick);
+    if (this->joy_msg.buttons[5] && this->joy_msg.buttons[10])
+        this->control.SetGamepad(Input::Gamepad::RB_RStick);
+    if (this->joy_msg.buttons[5] && this->joy_msg.axes[7] > 0)
+        this->control.SetGamepad(Input::Gamepad::RB_DPadUp);
+    if (this->joy_msg.buttons[5] && this->joy_msg.axes[7] < 0)
+        this->control.SetGamepad(Input::Gamepad::RB_DPadDown);
+    if (this->joy_msg.buttons[5] && this->joy_msg.axes[6] > 0)
+        this->control.SetGamepad(Input::Gamepad::RB_DPadRight);
+    if (this->joy_msg.buttons[5] && this->joy_msg.axes[6] < 0)
+        this->control.SetGamepad(Input::Gamepad::RB_DPadLeft);
+    if (this->joy_msg.buttons[4] && this->joy_msg.buttons[5])
+        this->control.SetGamepad(Input::Gamepad::LB_RB);
 
-    this->control.x = this->joy_msg.axes[1] * 1.5; // LY
-    this->control.y = this->joy_msg.axes[0] * 1.5; // LX
+    this->control.x = this->joy_msg.axes[1] * 1.5;   // LY
+    this->control.y = this->joy_msg.axes[0] * 1.5;   // LX
     this->control.yaw = this->joy_msg.axes[3] * 1.5; // RX
 }
 
@@ -580,7 +624,7 @@ void RL_Sim::RunModel()
     if (this->rl_init_done && simulation_running)
     {
         this->episode_length_buf += 1;
-        // this->obs.lin_vel = torch::tensor({{this->vel.linear.x, this->vel.linear.y, this->vel.linear.z}});
+        // this->obs.lin_vel = torch::tensor({{this->cmd_vel.linear.x, this->cmd_vel.linear.y, this->cmd_vel.linear.z}});
         this->obs.ang_vel = torch::tensor(this->robot_state.imu.gyroscope).unsqueeze(0);
         if (this->control.navigation_mode)
         {

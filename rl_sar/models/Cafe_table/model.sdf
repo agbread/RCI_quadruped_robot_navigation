@@ -1,5 +1,5 @@
 <sdf version="1.5">
-    <model name="cafe table">
+    <model name="Cafe_table">
         <static>true</static>
         <link name="link">
             <collision name="surface">
@@ -29,7 +29,7 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/cafe%20table/3/files/meshes/cafe_table.dae</uri>
+                        <uri>model://Cafe_table/meshes/cafe_table.dae</uri>
                     </mesh>
                 </geometry>
             </visual>
