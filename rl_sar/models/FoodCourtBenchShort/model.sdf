@@ -7,14 +7,14 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/foodcourtbenchshort/2/files/meshes/FoodCourtBenchShort.obj</uri>
+                        <uri>model://FoodCourtBenchShort/meshes/FoodCourtBenchShort.obj</uri>
                     </mesh>
                 </geometry>
             </visual>
             <collision name="collision">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/foodcourtbenchshort/2/files/meshes/FoodCourtBenchShort_Col.obj</uri>
+                        <uri>model://FoodCourtBenchShort/meshes/FoodCourtBenchShort_Col.obj</uri>
                     </mesh>
                 </geometry>
             </collision>

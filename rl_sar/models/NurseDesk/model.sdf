@@ -7,7 +7,7 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/nursedesk/3/files/meshes/NurseDesk.obj</uri>
+                        <uri>model://NurseDesk/meshes/NurseDesk.obj</uri>
                         <scale>0.001 0.001 0.001</scale>
                     </mesh>
                 </geometry>
@@ -15,7 +15,7 @@
             <collision name="collision">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/nursedesk/3/files/meshes/NurseDesk.obj</uri>
+                        <uri>model://NurseDesk/meshes/NurseDesk.obj</uri>
                         <scale>0.001 0.001 0.001</scale>
                     </mesh>
                 </geometry>

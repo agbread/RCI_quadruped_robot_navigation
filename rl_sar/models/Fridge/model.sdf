@@ -7,14 +7,14 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/fridge/2/files/meshes/Fridge.obj</uri>
+                        <uri>model://Fridge/meshes/Fridge.obj</uri>
                     </mesh>
                 </geometry>
             </visual>
             <collision name="collision">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/fridge/2/files/meshes/Fridge_Col.obj</uri>
+                        <uri>model://Fridge/meshes/Fridge_Col.obj</uri>
                     </mesh>
                 </geometry>
             </collision>

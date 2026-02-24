@@ -6,14 +6,14 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/vendingmachine/3/files/meshes/VendingMachine.obj</uri>
+                        <uri>model://VendingMachine/meshes/VendingMachine.obj</uri>
                     </mesh>
                 </geometry>
             </visual>
             <collision name="collision">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/vendingmachine/3/files/meshes/VendingMachine.obj</uri>
+                        <uri>model://VendingMachine/meshes/VendingMachine.obj</uri>
                     </mesh>
                 </geometry>
             </collision>

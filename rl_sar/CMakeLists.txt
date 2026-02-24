@@ -241,6 +241,7 @@ install(TARGETS rl_real_l4w4 DESTINATION lib/${PROJECT_NAME})
 
 install(PROGRAMS
     scripts/actuator_net.py
+    scripts/odom_to_tf.py
     DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -248,6 +249,7 @@ install(
     DIRECTORY launch worlds config policy
     DESTINATION share/${PROJECT_NAME}/${dir}
 )
+
 
 # only for test
 # add_executable(test_observation_buffer test/test_observation_buffer.cpp)

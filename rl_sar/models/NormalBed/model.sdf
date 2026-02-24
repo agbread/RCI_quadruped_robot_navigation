@@ -6,7 +6,7 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/normalbed/2/files/meshes/bed.obj</uri>
+                        <uri>model://NormalBed/meshes/bed.obj</uri>
                         <scale>1 1 1</scale>
                     </mesh>
                 </geometry>
@@ -14,7 +14,7 @@
             <collision name="collision">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/normalbed/2/files/meshes/bed.obj</uri>
+                        <uri>model://NormalBed/meshes/bed.obj</uri>
                         <scale>1 1 1</scale>
                     </mesh>
                 </geometry>

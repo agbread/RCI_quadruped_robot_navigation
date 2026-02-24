@@ -6,7 +6,7 @@
             <visual name="visual">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/toilet/2/files/meshes/toilet.obj</uri>
+                        <uri>model://Toilet/meshes/toilet.obj</uri>
                         <scale>1.75 1.75 1.75</scale>
                     </mesh>
                 </geometry>
@@ -14,7 +14,7 @@
             <collision name="collision">
                 <geometry>
                     <mesh>
-                        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/toilet/2/files/meshes/toilet.obj</uri>
+                        <uri>model://Toilet/meshes/toilet.obj</uri>
                         <scale>1.75 1.75 1.75</scale>
                     </mesh>
                 </geometry>
