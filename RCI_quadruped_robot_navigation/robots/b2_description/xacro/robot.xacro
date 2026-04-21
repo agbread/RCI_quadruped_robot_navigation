@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<robot name="b2_description" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find b2_description)/xacro/gazebo_tf.xacro"/>
+    <!-- <xacro:include filename="$(find b2_description)/xacro/gazebo.xacro"/> -->
+    <xacro:include filename="$(find b2_description)/urdf/b2_description.urdf"/>
+    
+    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
+    <xacro:VLP-16 parent="vlp16_link" name="vlp16" tf_prefix="" topic="/velodyne_points" organize_cloud="false" hz="10" lasers="16" samples="1000" collision_range="0.3" min_range="0.9" max_range="30.0" noise="0.008" min_angle="-${M_PI}" max_angle="${M_PI}" gpu="true">
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    </xacro:VLP-16>
+    <!-- RGB Camera -->
+    <joint name="camera_joint" type="fixed">
+        <origin xyz="0.35 0 0.05" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+    </joint>
+
+    <link name="camera_link">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.01"/>
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.03 0.06 0.03"/>
+            </geometry>
+            <material name="camera_gray">
+                <color rgba="0.5 0.5 0.5 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.03 0.06 0.03"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="camera_optical_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="-1.5707963 0 -1.5707963"/>
+        <parent link="camera_link"/>
+        <child link="camera_link_optical"/>
+    </joint>
+
+    <link name="camera_link_optical"></link>
+
+    <!-- Rotor related joint and link is only for demonstrate location. -->
+    <!-- Actually, the rotor will rotate and the joint is not fixed. Reduction ratio should be considered. -->
+
+</robot>
