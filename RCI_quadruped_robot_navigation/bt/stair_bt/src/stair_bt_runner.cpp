@@ -1,12 +1,12 @@
 #include <rclcpp/rclcpp.hpp>
 #include <behaviortree_cpp_v3/bt_factory.h>
 
-int main(int argc, char ** argv)
+int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<rclcpp::Node>("stair_bt_runner");
 
-  node->declare_parameter<std::string>("bt_xml_file", "/home/home/ros2_ws/src/RCI_quadruped_robot_navigation/bt/stair_bt/bt_trees/stairs.xml");
+  node->declare_parameter<std::string>("bt_xml_file", "/home/home/pony_ws/src/RCI_quadruped_robot_navigation/bt/stair_bt/bt_trees/stairs.xml");
   std::string xml_file;
   node->get_parameter("bt_xml_file", xml_file);
 
@@ -30,14 +30,14 @@ int main(int argc, char ** argv)
   {
     tree = factory.createTreeFromFile(xml_file);
   }
-  catch (const std::exception & e)
+  catch (const std::exception &e)
   {
     RCLCPP_ERROR(node->get_logger(),
                  "[stair_bt_runner] 트리 생성 실패: %s", e.what());
     return 1;
   }
 
-  rclcpp::Rate rate(10.0);  // 10 Hz tick
+  rclcpp::Rate rate(10.0); // 10 Hz tick
 
   BT::NodeStatus status = BT::NodeStatus::RUNNING;
 

@@ -14,8 +14,8 @@
       <SelectNearestElevator
           world_frame="map"
           base_frame="base_link"
-          lift1_yaml="/home/test_ws/src/RCI_quadruped_robot_navigation/bt/elevator_bt/config/elevator_lift1.yaml"
-          lift2_yaml="/home/test_ws/src/RCI_quadruped_robot_navigation/bt/elevator_bt/config/elevator_lift2.yaml"
+          lift1_yaml="/home/home/ros2_ws/src/RCI_quadruped_robot_navigation/bt/elevator_bt/config/elevator_lift1.yaml"
+          lift2_yaml="/home/home/ros2_ws/src/RCI_quadruped_robot_navigation/bt/elevator_bt/config/elevator_lift2.yaml"
           start_floor="{start_floor}"
           elev_yaml="{elev_yaml}"
           elevator_ns="{elevator_ns}"

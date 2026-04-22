@@ -1,10 +1,9 @@
 #include <rclcpp/rclcpp.hpp>
 #include <behaviortree_cpp_v3/bt_factory.h>
 
+#include "door_bt/bt_nodes/door_plan_controller.hpp"
 
-#include "door_bt/bt_nodes/door_plan_controller.hpp"  
-
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<rclcpp::Node>("door_bt_runner");
@@ -14,7 +13,7 @@ int main(int argc, char** argv)
   factory.registerNodeType<DoorPlanController>("DoorPlanController");
 
   std::string tree_file =
-    "/home/home/ros2_ws/src/RCI_quadruped_robot_navigation/bt/door_bt/bt_trees/tests/door_plan_controller_L1.xml";
+      "/home/home/ros2_ws/src/RCI_quadruped_robot_navigation/bt/door_bt/bt_trees/tests/door_plan_controller_L1.xml";
 
   RCLCPP_INFO(node->get_logger(), "Using BT XML: %s", tree_file.c_str());
 
